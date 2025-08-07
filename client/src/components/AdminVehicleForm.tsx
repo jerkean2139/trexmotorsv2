@@ -309,12 +309,12 @@ export default function AdminVehicleForm({ vehicle, onSuccess, onCancel }: Admin
         </div>
         <div>
           <Label htmlFor="statusBanner">Status Banner (Optional)</Label>
-          <Select value={formData.statusBanner || ""} onValueChange={(value) => handleChange('statusBanner', value === "" ? null : value)}>
+          <Select value={formData.statusBanner || "none"} onValueChange={(value) => handleChange('statusBanner', value === "none" ? null : value)}>
             <SelectTrigger>
               <SelectValue placeholder="Select status banner" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="">No Banner</SelectItem>
+              <SelectItem value="none">No Banner</SelectItem>
               <SelectItem value="new">New</SelectItem>
               <SelectItem value="low-miles">Low Miles</SelectItem>
               <SelectItem value="local-trade">Local Trade In</SelectItem>
