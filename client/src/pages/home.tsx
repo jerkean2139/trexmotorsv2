@@ -82,7 +82,7 @@ export default function Home() {
               </Button>
               <Button 
                 variant="outline"
-                className="border-2 border-white hover:bg-white hover:text-gray-900 text-white px-8 py-3 text-lg font-semibold"
+                className="border-2 border-white hover:bg-white hover:text-black text-white px-8 py-3 text-lg font-semibold"
               >
                 <i className="fas fa-calculator mr-2"></i>Get Financing
               </Button>
