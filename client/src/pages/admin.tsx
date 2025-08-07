@@ -8,7 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
 import AdminVehicleForm from "@/components/AdminVehicleForm";
-import BulkImageImport from "@/components/BulkImageImport";
+
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 import type { Vehicle } from "@shared/schema";
@@ -16,7 +16,7 @@ import type { Vehicle } from "@shared/schema";
 export default function Admin() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [showAddModal, setShowAddModal] = useState(false);
-  const [showBulkImport, setShowBulkImport] = useState(false);
+
   const [editingVehicle, setEditingVehicle] = useState<Vehicle | null>(null);
   const [loginForm, setLoginForm] = useState({ username: "admin", password: "trex2025!" });
   const [searchQuery, setSearchQuery] = useState("");
@@ -191,12 +191,7 @@ export default function Admin() {
               >
                 + Add New Vehicle
               </Button>
-              <Button 
-                onClick={() => setShowBulkImport(true)}
-                className="bg-white text-[#4CAF50] hover:bg-gray-100 font-medium border border-[#4CAF50]"
-              >
-                📷 Bulk Import Images
-              </Button>
+
             </div>
             <Button 
               onClick={handleLogout}
@@ -463,18 +458,7 @@ export default function Admin() {
         </DialogContent>
       </Dialog>
 
-      {/* Bulk Import Modal */}
-      <Dialog open={showBulkImport} onOpenChange={setShowBulkImport}>
-        <DialogContent className="max-w-4xl max-h-screen overflow-y-auto">
-          <DialogHeader>
-            <DialogTitle>Bulk Import Vehicle Images</DialogTitle>
-          </DialogHeader>
-          <BulkImageImport 
-            vehicles={vehicles}
-            onClose={() => setShowBulkImport(false)}
-          />
-        </DialogContent>
-      </Dialog>
+
     </div>
   );
 }

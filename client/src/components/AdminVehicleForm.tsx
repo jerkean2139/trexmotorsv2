@@ -6,11 +6,9 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
-import { ObjectUploader } from "@/components/ObjectUploader";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 import type { Vehicle, InsertVehicle } from "@shared/schema";
-import type { UploadResult } from "@uppy/core";
 
 interface AdminVehicleFormProps {
   vehicle?: Vehicle | null;
@@ -44,7 +42,6 @@ export default function AdminVehicleForm({ vehicle, onSuccess, onCancel }: Admin
   });
 
   const [newFeature, setNewFeature] = useState('');
-  const [newImageUrl, setNewImageUrl] = useState('');
   const queryClient = useQueryClient();
   const { toast } = useToast();
 
@@ -92,48 +89,7 @@ export default function AdminVehicleForm({ vehicle, onSuccess, onCancel }: Admin
     setFormData({ ...formData, features: updatedFeatures });
   };
 
-  const handleGetUploadParameters = async () => {
-    const response = await fetch("/api/objects/upload", {
-      method: "POST",
-      credentials: "include"
-    });
-    const data = await response.json();
-    return {
-      method: "PUT" as const,
-      url: data.uploadURL,
-    };
-  };
 
-  const handleUploadComplete = async (result: UploadResult<Record<string, unknown>, Record<string, unknown>>) => {
-    const uploadedUrls = result.successful?.map(file => file.uploadURL as string) || [];
-    const currentImages = formData.images || [];
-    setFormData({
-      ...formData,
-      images: [...currentImages, ...uploadedUrls]
-    });
-    
-    toast({
-      title: "Success",
-      description: `${uploadedUrls.length} image(s) uploaded successfully`
-    });
-  };
-
-  const handleAddImageUrl = () => {
-    if (newImageUrl.trim()) {
-      const images = [...(formData.images || []), newImageUrl.trim()];
-      setFormData({ ...formData, images });
-      setNewImageUrl('');
-      toast({
-        title: "Success",
-        description: "Image URL added successfully"
-      });
-    }
-  };
-
-  const handleRemoveImage = (index: number) => {
-    const updatedImages = formData.images?.filter((_, i) => i !== index) || [];
-    setFormData({ ...formData, images: updatedImages });
-  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -370,71 +326,63 @@ export default function AdminVehicleForm({ vehicle, onSuccess, onCancel }: Admin
         </div>
       </div>
 
-      {/* Image Management */}
+      {/* Image URLs */}
       <div>
         <Label className="text-lg font-semibold">Vehicle Images</Label>
         <div className="space-y-4">
-          {/* Upload Images */}
+          {/* Bulk Image URL Input */}
           <div>
-            <Label className="text-sm text-gray-600">Upload Image Files</Label>
-            <ObjectUploader
-              maxNumberOfFiles={10}
-              onGetUploadParameters={handleGetUploadParameters}
-              onComplete={handleUploadComplete}
-              buttonClassName="w-full"
-            >
-              <div className="flex items-center justify-center">
-                <i className="fas fa-cloud-upload-alt mr-2"></i>
-                Upload Images
-              </div>
-            </ObjectUploader>
-          </div>
+            <Label className="text-sm text-gray-600">Google Drive Image URLs (one per line)</Label>
+            <textarea
+              className="w-full h-32 p-3 border rounded text-sm"
+              placeholder={`Paste your Google Drive image URLs here, one per line:
 
-          {/* Add Google Drive Image URL */}
-          <div>
-            <Label className="text-sm text-gray-600">Add Google Drive Image URL</Label>
-            <div className="flex gap-2">
-              <Input
-                value={newImageUrl}
-                onChange={(e) => setNewImageUrl(e.target.value)}
-                placeholder="Paste Google Drive image link here..."
-                className="flex-1"
-              />
-              <Button type="button" onClick={handleAddImageUrl} variant="outline">
-                <i className="fas fa-plus mr-2"></i>Add Image
-              </Button>
-            </div>
-            <p className="text-xs text-gray-500 mt-1">
-              Tip: Right-click on Google Drive image → "Copy image address"
+https://drive.google.com/uc?export=view&id=FILE_ID_1
+https://drive.google.com/uc?export=view&id=FILE_ID_2
+https://drive.google.com/uc?export=view&id=FILE_ID_3
+
+Or any other direct image URLs...`}
+              value={formData.images?.join('\n') || ''}
+              onChange={(e) => {
+                const urls = e.target.value.split('\n').map(url => url.trim()).filter(url => url);
+                handleChange('images', urls);
+              }}
+            />
+            <p className="text-xs text-gray-500 mt-2">
+              <strong>Google Drive Setup:</strong> Right-click image → Share → "Anyone with the link" → Copy link. 
+              Paste sharing links and they'll be converted to direct image URLs automatically.
             </p>
           </div>
           
-          {/* Current Images */}
+          {/* Image Preview */}
           {formData.images && formData.images.length > 0 && (
             <div>
-              <Label className="text-sm text-gray-600">Current Images ({formData.images.length})</Label>
+              <Label className="text-sm text-gray-600">Image Preview ({formData.images.length})</Label>
               <div className="grid grid-cols-3 md:grid-cols-4 gap-3 mt-2">
-                {formData.images.map((image, index) => (
-                  <div key={index} className="relative group">
-                    <img
-                      src={image as string}
-                      alt={`Vehicle image ${index + 1}`}
-                      className="w-full h-24 object-cover rounded border-2 border-gray-200 group-hover:border-trex-green"
-                    />
-                    <Button
-                      type="button"
-                      variant="destructive"
-                      size="sm"
-                      className="absolute top-1 right-1 opacity-0 group-hover:opacity-100 transition-opacity"
-                      onClick={() => handleRemoveImage(index)}
-                    >
-                      <i className="fas fa-times text-xs"></i>
-                    </Button>
-                    <div className="absolute bottom-1 left-1 bg-black bg-opacity-50 text-white text-xs px-1 rounded">
-                      {index + 1}
+                {formData.images.map((image, index) => {
+                  // Convert Google Drive sharing links to direct image URLs for preview
+                  let imageUrl = image as string;
+                  const driveMatch = imageUrl.match(/\/file\/d\/([a-zA-Z0-9-_]+)/);
+                  if (driveMatch) {
+                    imageUrl = `https://drive.google.com/uc?export=view&id=${driveMatch[1]}`;
+                  }
+                  
+                  return (
+                    <div key={index} className="relative group">
+                      <img
+                        src={imageUrl}
+                        alt={`Vehicle image ${index + 1}`}
+                        className="w-full h-24 object-cover rounded border-2 border-gray-200 group-hover:border-trex-green"
+                        onError={(e) => {
+                          (e.target as HTMLImageElement).src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjI0IiBoZWlnaHQ9IjI0IiBmaWxsPSIjZjNmNGY2Ii8+CjxwYXRoIGQ9Im0xNSAxMi0zLTMtMy4wMDEgM20xLjUtMi41YTEuNSAxLjUgMCAxIDEgMC0zIDEuNSAxLjUgMCAwIDEgMCAzem0tNi0yaDEwdjhoLTEweiIgc3Ryb2tlPSIjOWNhM2FmIiBzdHJva2Utd2lkdGg9IjEuNSIgZmlsbD0ibm9uZSIvPgo8L3N2Zz4K';
+                        }}
+                      />
+                      <div className="absolute bottom-1 left-1 bg-black bg-opacity-50 text-white text-xs px-1 rounded">
+                        {index + 1}
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             </div>
           )}
