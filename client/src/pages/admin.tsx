@@ -30,6 +30,9 @@ export default function Admin() {
     queryKey: ["/api/auth/check"],
     queryFn: async () => {
       const response = await fetch("/api/auth/check", { credentials: 'include' });
+      if (!response.ok) {
+        throw new Error('Auth check failed');
+      }
       return response.json();
     },
   });
@@ -43,7 +46,16 @@ export default function Admin() {
   // Login mutation
   const loginMutation = useMutation({
     mutationFn: async (credentials: { username: string; password: string }) => {
-      return apiRequest("POST", "/api/auth/login", credentials);
+      const response = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: 'include',
+        body: JSON.stringify(credentials)
+      });
+      if (!response.ok) {
+        throw new Error('Login failed');
+      }
+      return response.json();
     },
     onSuccess: () => {
       setIsAuthenticated(true);
