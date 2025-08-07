@@ -81,18 +81,19 @@ After deployment:
 Your deployed site will have:
 
 ✅ **Working Features:**
-- Complete vehicle inventory browsing
-- Advanced search and filtering
-- Vehicle detail modals with image galleries
-- Professional T-Rex Motors branding
-- About Us and Contact sections
-- Financing application form (frontend)
-- Mobile-responsive design
+- **Complete vehicle inventory** - All 20 vehicles from your database exported
+- **Real vehicle data** - Chevrolet, Buick, Ford, Jeep, Honda, GMC, Subaru, Dodge, Kia, Hyundai, Toyota
+- **Advanced search and filtering** - Works with your actual inventory 
+- **Vehicle detail modals** - All vehicle images and details included
+- **Professional T-Rex Motors branding** - Your actual logo and business information
+- **About Us and Contact sections** - Complete business details
+- **Financing application form** - Professional loan application interface
+- **Mobile-responsive design** - Perfect on all devices
 
 ⚠️ **Limitations (Static Deploy):**
 - Admin dashboard won't work (needs server)
-- Forms won't submit to database
-- Vehicle data is static (can't be updated through admin)
+- Forms won't submit to database (frontend only)
+- Vehicle data is frozen at export time (can't be updated through admin)
 
 ## Troubleshooting
 

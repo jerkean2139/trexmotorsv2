@@ -24,23 +24,40 @@ export default function Home() {
   const { data: vehiclesData, isLoading } = useQuery<{vehicles: Vehicle[], totalCount: number}>({
     queryKey: ["/api/vehicles", filters],
     queryFn: async ({ queryKey }) => {
-      const [url, params] = queryKey;
-      const searchParams = new URLSearchParams();
-      
-      Object.entries(params as any).forEach(([key, value]) => {
-        if (value) {
-          searchParams.append(key, value as string);
-        }
-      });
+      try {
+        const [url, params] = queryKey;
+        const searchParams = new URLSearchParams();
+        
+        Object.entries(params as any).forEach(([key, value]) => {
+          if (value) {
+            searchParams.append(key, value as string);
+          }
+        });
 
-      const response = await fetch(`${url}?${searchParams}`);
-      if (!response.ok) throw new Error("Failed to fetch vehicles");
-      return response.json();
+        const response = await fetch(`${url}?${searchParams}`);
+        if (!response.ok) throw new Error("Failed to fetch vehicles");
+        return response.json();
+      } catch (error) {
+        // Fallback to exported data for static deployment
+        const { getVehicles } = await import("@/lib/exportedVehicles");
+        return getVehicles(queryKey[1]);
+      }
     },
   });
 
   const { data: featuredVehicles, isLoading: featuredLoading } = useQuery<Vehicle[]>({
     queryKey: ["/api/vehicles/featured"],
+    queryFn: async () => {
+      try {
+        const response = await fetch("/api/vehicles/featured");
+        if (!response.ok) throw new Error("Failed to fetch featured vehicles");
+        return response.json();
+      } catch (error) {
+        // Fallback to exported data for static deployment
+        const { getFeaturedVehicles } = await import("@/lib/exportedVehicles");
+        return getFeaturedVehicles();
+      }
+    },
   });
 
   const handleFilterChange = (newFilters: any) => {

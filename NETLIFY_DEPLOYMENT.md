@@ -43,10 +43,12 @@ dist/
 **For Static Deployment:**
 - Deploy the `dist/public` folder only
 - This gives you a fully functional website with:
-  - Vehicle browsing and search
-  - Contact forms (frontend only)
+  - **All 20 real vehicles** from your T-Rex Motors database
+  - Vehicle browsing and search with actual inventory
+  - Contact forms (frontend only)  
   - All visual components and navigation
   - About Us and Contact sections
+  - Professional T-Rex Motors branding
 
 **Backend Features Not Available:**
 - Admin dashboard (requires server)
