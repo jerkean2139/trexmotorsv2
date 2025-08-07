@@ -19,26 +19,55 @@ export default function VehicleCard({ vehicle, onClick }: VehicleCardProps) {
 
   const getBadgeVariant = (type: string) => {
     switch (type) {
+      case 'new':
+        return 'bg-green-600 text-white';
+      case 'low-miles':
+        return 'bg-blue-600 text-white';
+      case 'local-trade':
+        return 'bg-purple-600 text-white';
+      case 'just-reduced':
+        return 'bg-red-600 text-white';
+      case 'sold':
+        return 'bg-gray-600 text-white';
+      case 'pending':
+        return 'bg-orange-600 text-white';
       case 'featured':
         return 'bg-trex-green text-white';
-      case 'low-miles':
-        return 'bg-yellow-500 text-white';
-      case 'fuel-efficient':
-        return 'bg-blue-500 text-white';
-      case 'luxury':
-        return 'bg-purple-500 text-white';
       default:
         return 'bg-gray-500 text-white';
     }
   };
 
-  const getBadgeForVehicle = (vehicle: Vehicle) => {
-    if (vehicle.isFeatured) return { text: 'Featured', type: 'featured' };
-    if (vehicle.mileage < 30000) return { text: 'Low Miles', type: 'low-miles' };
-    if (vehicle.fuelType === 'hybrid' || vehicle.fuelType === 'electric') return { text: 'Fuel Efficient', type: 'fuel-efficient' };
-    if (vehicle.make.toLowerCase().includes('lexus') || vehicle.make.toLowerCase().includes('bmw') || vehicle.make.toLowerCase().includes('mercedes')) {
-      return { text: 'Luxury', type: 'luxury' };
+  const getBadgeText = (type: string) => {
+    switch (type) {
+      case 'new':
+        return 'New';
+      case 'low-miles':
+        return 'Low Miles';
+      case 'local-trade':
+        return 'Local Trade In';
+      case 'just-reduced':
+        return 'Just Reduced';
+      case 'sold':
+        return 'Sold';
+      case 'pending':
+        return 'Pending';
+      default:
+        return type;
     }
+  };
+
+  const getBadgeForVehicle = (vehicle: Vehicle) => {
+    // First priority: Status banner from admin
+    if (vehicle.statusBanner) {
+      return { text: getBadgeText(vehicle.statusBanner), type: vehicle.statusBanner };
+    }
+    
+    // Second priority: Featured status
+    if (vehicle.isFeatured) {
+      return { text: 'Featured', type: 'featured' };
+    }
+    
     return null;
   };
 
