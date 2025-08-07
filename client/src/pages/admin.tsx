@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "wouter";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -236,6 +237,14 @@ export default function Admin() {
               >
                 + Add New Vehicle
               </Button>
+              <Link href="/admin/submissions">
+                <Button 
+                  className="bg-green-600 text-white hover:bg-green-700 font-medium"
+                >
+                  <i className="fas fa-envelope mr-2"></i>
+                  View Submissions
+                </Button>
+              </Link>
 
             </div>
             <Button 

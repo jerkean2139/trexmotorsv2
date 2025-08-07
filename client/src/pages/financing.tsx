@@ -54,15 +54,24 @@ function FinancingPage() {
     setIsSubmitting(true);
 
     try {
-      // In a real application, you would send this to your backend
-      // For now, we'll simulate a successful submission
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      const response = await fetch('/api/financing-applications', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to submit application');
+      }
       
-      // Redirect to thank you page instead of showing toast
+      // Redirect to thank you page on success
       setLocation('/thank-you');
     } catch (error) {
+      console.error('Error submitting financing application:', error);
       toast({
-        title: "Submission Failed",
+        title: "Submission Failed", 
         description: "There was an error submitting your application. Please try again.",
         variant: "destructive",
       });
