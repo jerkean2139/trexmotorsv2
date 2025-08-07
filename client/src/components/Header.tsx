@@ -22,8 +22,11 @@ export default function Header() {
           {/* Logo */}
           <div className="flex items-center">
             <Link href="/" className="flex items-center">
-              <i className="fas fa-car text-trex-green text-2xl mr-2"></i>
-              <span className="text-2xl font-bold text-gray-900">T-Rex Motors</span>
+              <img 
+                src="https://storage.googleapis.com/msgsndr/QjiQRR74D1pxPF7I8fcC/media/68042afc29d629c59c352a2b.png" 
+                alt="T-Rex Motors Logo" 
+                className="w-[180px] sm:w-[200px] md:w-[240px] lg:w-[280px] xl:w-[300px] h-auto"
+              />
             </Link>
           </div>
 

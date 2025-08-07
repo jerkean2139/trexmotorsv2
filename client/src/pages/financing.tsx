@@ -97,10 +97,11 @@ function FinancingPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center justify-between">
             <Link href="/">
-              <div className="flex items-center space-x-2 cursor-pointer">
-                <div className="text-2xl font-bold text-trex-green">🦖</div>
-                <span className="text-xl font-bold text-gray-900">T-Rex Motors</span>
-              </div>
+              <img 
+                src="https://storage.googleapis.com/msgsndr/QjiQRR74D1pxPF7I8fcC/media/68042afc29d629c59c352a2b.png" 
+                alt="T-Rex Motors Logo" 
+                className="w-[120px] sm:w-[140px] md:w-[160px] h-auto cursor-pointer"
+              />
             </Link>
             <Link href="/">
               <Button variant="outline">Back to Inventory</Button>
