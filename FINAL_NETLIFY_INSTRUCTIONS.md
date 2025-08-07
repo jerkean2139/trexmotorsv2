@@ -12,7 +12,7 @@ Your vehicle data issue has been completely fixed with smart deployment detectio
 
 ### Vehicle Data Confirmed Working
 
-- **5 Real Vehicles Embedded:** Chevrolet Cruze, Buick Enclave, Ford F-150, Jeep Wrangler, Honda Civic
+- **All 20 Real Vehicles Embedded:** Complete T-Rex Motors inventory with Chevrolet, Buick, Ford, Jeep, Honda, GMC, Subaru, Dodge, Kia, Hyundai, Toyota
 - **3 Featured Vehicles:** Buick Enclave, Ford F-150, Jeep Wrangler
 - **All Details Included:** Real prices, mileage, images, descriptions
 
@@ -46,7 +46,7 @@ git push -u origin main
 ## What You'll See on Netlify
 
 ✅ **Console Message:** "Static deployment detected, using embedded vehicle data"  
-✅ **Vehicles Display:** All 5 vehicles show immediately  
+✅ **Vehicles Display:** All 20 vehicles show immediately  
 ✅ **Search Works:** Try searching "Ford" or "Jeep"  
 ✅ **Filters Work:** Year range, price range, make selection  
 ✅ **Featured Section:** 3 vehicles prominently displayed  
@@ -58,7 +58,7 @@ After deployment:
 - [ ] Open your Netlify site URL
 - [ ] Press F12 to open browser console  
 - [ ] Look for: "Static deployment detected" message
-- [ ] Verify: All 5 vehicles display on homepage
+- [ ] Verify: All 20 vehicles display on homepage
 - [ ] Test: Search for "Ford" (should show F-150)
 - [ ] Test: Click vehicle card (should open detail modal)
 - [ ] Test: Featured vehicles section populated
