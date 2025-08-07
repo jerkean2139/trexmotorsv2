@@ -35,7 +35,8 @@ T-REX MOTORS - NETLIFY DEPLOYMENT CHECKLIST
 □ STEP 6: VERIFY DEPLOYMENT
   □ Wait for build to complete
   □ Visit your live site URL
-  □ Test vehicle browsing and search
+  □ Test vehicle browsing and search (vehicles now load automatically!)
+  □ Check browser console - should see "API unavailable, using real vehicle data"
   □ Check navigation (About, Contact, Financing)
   □ Verify mobile responsiveness
 

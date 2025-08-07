@@ -106,6 +106,11 @@ Your deployed site will have:
 - Check the publish directory path
 - Look at deploy logs in Netlify dashboard
 
+**No Vehicles Showing?**
+- Fixed! Vehicle data is now embedded directly in the main bundle
+- Your vehicles will load automatically when API fails
+- Check browser console for "API unavailable, using real vehicle data" message
+
 ## Your Deployment Files
 
 These files were created for Netlify deployment:
