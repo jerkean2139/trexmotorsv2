@@ -25,6 +25,9 @@ export default function Admin() {
   const queryClient = useQueryClient();
   const { toast } = useToast();
 
+  // Check if this is a static deployment
+  const isStaticDeployment = typeof window !== 'undefined' && !window.location.href.includes('localhost') && !window.location.href.includes('replit.dev') && !window.location.href.includes('127.0.0.1');
+
   // Check authentication status
   const { data: authData, refetch: refetchAuth } = useQuery({
     queryKey: ["/api/auth/check"],
@@ -80,7 +83,10 @@ export default function Admin() {
     },
     onError: (error) => {
       console.error("Login error:", error);
-      toast({ title: "Error", description: "Invalid credentials", variant: "destructive" });
+      const errorMessage = isStaticDeployment 
+        ? "Admin login is only available in development environment"
+        : "Invalid credentials";
+      toast({ title: "Error", description: errorMessage, variant: "destructive" });
     },
   });
 
@@ -163,6 +169,14 @@ export default function Admin() {
             </CardTitle>
           </CardHeader>
           <CardContent>
+            {isStaticDeployment && (
+              <div className="mb-4 p-4 bg-yellow-50 border border-yellow-200 rounded-md">
+                <p className="text-sm text-yellow-800">
+                  <strong>Notice:</strong> Admin functionality is only available in the development environment. 
+                  This static deployment provides read-only access to the vehicle inventory.
+                </p>
+              </div>
+            )}
             <form onSubmit={handleLogin} className="space-y-4">
               <div>
                 <Label htmlFor="username">Username</Label>
@@ -172,6 +186,7 @@ export default function Admin() {
                   value={loginForm.username}
                   onChange={(e) => setLoginForm({ ...loginForm, username: e.target.value })}
                   required
+                  disabled={isStaticDeployment}
                 />
               </div>
               <div>
@@ -182,14 +197,15 @@ export default function Admin() {
                   value={loginForm.password}
                   onChange={(e) => setLoginForm({ ...loginForm, password: e.target.value })}
                   required
+                  disabled={isStaticDeployment}
                 />
               </div>
               <Button 
                 type="submit" 
                 className="w-full bg-trex-green hover:bg-trex-green text-white"
-                disabled={loginMutation.isPending}
+                disabled={loginMutation.isPending || isStaticDeployment}
               >
-                {loginMutation.isPending ? "Logging in..." : "Login"}
+                {loginMutation.isPending ? "Logging in..." : isStaticDeployment ? "Admin Not Available" : "Login"}
               </Button>
             </form>
           </CardContent>
