@@ -1,0 +1,13 @@
+[build]
+  base = "."
+  publish = "client/dist"
+  command = "vite build --outDir client/dist"
+
+[build.environment]
+  NODE_VERSION = "18"
+  NPM_FLAGS = "--prefix=. --silent"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
