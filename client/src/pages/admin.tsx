@@ -26,15 +26,19 @@ export default function Admin() {
   const { toast } = useToast();
 
   // Check authentication status
-  const { data: authData } = useQuery({
+  const { data: authData, refetch: refetchAuth } = useQuery({
     queryKey: ["/api/auth/check"],
     queryFn: async () => {
       const response = await fetch("/api/auth/check", { credentials: 'include' });
       if (!response.ok) {
-        throw new Error('Auth check failed');
+        return { isAuthenticated: false };
       }
-      return response.json();
+      const result = await response.json();
+      console.log("Auth check result:", result);
+      return result;
     },
+    refetchInterval: false,
+    refetchOnWindowFocus: false,
   });
 
   // Get vehicles for admin
@@ -57,12 +61,15 @@ export default function Admin() {
       }
       return response.json();
     },
-    onSuccess: () => {
+    onSuccess: async (data) => {
+      console.log("Login success:", data);
       setIsAuthenticated(true);
       toast({ title: "Success", description: "Logged in successfully" });
-      queryClient.invalidateQueries({ queryKey: ["/api/auth/check"] });
+      await refetchAuth();
+      queryClient.invalidateQueries({ queryKey: ["/api/vehicles"] });
     },
-    onError: () => {
+    onError: (error) => {
+      console.error("Login error:", error);
       toast({ title: "Error", description: "Invalid credentials", variant: "destructive" });
     },
   });
