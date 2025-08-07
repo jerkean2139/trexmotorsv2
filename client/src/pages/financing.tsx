@@ -5,7 +5,7 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
-import { Link } from "wouter";
+import { Link, useLocation } from "wouter";
 
 interface FinancingFormData {
   firstName: string;
@@ -26,6 +26,7 @@ interface FinancingFormData {
 
 function FinancingPage() {
   const { toast } = useToast();
+  const [, setLocation] = useLocation();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState<FinancingFormData>({
     firstName: "",
@@ -57,35 +58,14 @@ function FinancingPage() {
       // For now, we'll simulate a successful submission
       await new Promise(resolve => setTimeout(resolve, 1000));
       
-      toast({
-        title: "Application Submitted!",
-        description: "We'll review your financing application and contact you within 24 hours.",
-      });
-
-      // Reset form
-      setFormData({
-        firstName: "",
-        lastName: "",
-        email: "",
-        phone: "",
-        address: "",
-        city: "",
-        state: "",
-        zipCode: "",
-        employmentStatus: "",
-        monthlyIncome: "",
-        creditScore: "",
-        downPayment: "",
-        vehicleInterest: "",
-        additionalInfo: "",
-      });
+      // Redirect to thank you page instead of showing toast
+      setLocation('/thank-you');
     } catch (error) {
       toast({
         title: "Submission Failed",
         description: "There was an error submitting your application. Please try again.",
         variant: "destructive",
       });
-    } finally {
       setIsSubmitting(false);
     }
   };
