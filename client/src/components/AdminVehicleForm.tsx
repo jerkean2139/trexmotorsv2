@@ -370,25 +370,27 @@ export default function AdminVehicleForm({ vehicle, onSuccess, onCancel }: Admin
           {/* Bulk Image URL Input */}
           <div>
             <Label className="text-sm text-gray-600">Or paste Google Drive URLs (one per line)</Label>
-            <textarea
-              className="w-full h-32 p-3 border rounded text-sm font-mono resize-none"
-              placeholder={`Paste your Google Drive image URLs here, one per line (up to 10):
+            <div className="space-y-2">
+              <textarea
+                className="w-full h-32 p-3 border rounded text-sm font-mono resize-none"
+                placeholder={`Paste your Google Drive image URLs here, one per line (up to 10):
 
 https://drive.google.com/file/d/FILE_ID_1/view
 https://drive.google.com/file/d/FILE_ID_2/view
 https://drive.google.com/uc?export=view&id=FILE_ID_3
 
-Or any other direct image URLs...`}
-              value={(formData.images as string[] || []).join('\n')}
-              onChange={(e) => {
-                const textValue = e.target.value;
-                console.log('Textarea raw value:', textValue);
-                console.log('Lines found:', textValue.split('\n'));
-                
-                // Process URLs and convert Google Drive sharing links to direct image URLs
-                const rawUrls = textValue.split('\n')
-                  .map(url => url.trim())
-                  .filter(url => url.length > 0 && url.startsWith('http'));
+Press Enter after each URL to add it as a separate image...`}
+                value={(formData.images as string[] || []).join('\n')}
+                onChange={(e) => {
+                  const textValue = e.target.value;
+                  console.log('Textarea raw value:', JSON.stringify(textValue));
+                  const lines = textValue.split('\n');
+                  console.log('Lines found:', lines);
+                  
+                  // Process URLs and convert Google Drive sharing links to direct image URLs
+                  const rawUrls = lines
+                    .map(url => url.trim())
+                    .filter(url => url.length > 0 && url.startsWith('http'));
                 
                 // Convert Google Drive sharing links to direct image URLs
                 const processedUrls = rawUrls.map(url => {
@@ -432,7 +434,62 @@ Or any other direct image URLs...`}
                 console.log('Processed URLs:', processedUrls);
                 handleChange('images', processedUrls);
               }}
-            />
+              />
+              
+              {/* Quick Add URL Input */}
+              <div className="flex gap-2">
+                <input
+                  type="text"
+                  className="flex-1 p-2 border rounded text-sm"
+                  placeholder="Or paste one URL here and click Add..."
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                      e.preventDefault();
+                      const input = e.target as HTMLInputElement;
+                      const url = input.value.trim();
+                      if (url && url.startsWith('http')) {
+                        const currentImages = (formData.images as string[]) || [];
+                        if (currentImages.length < 10) {
+                          // Convert Google Drive URL if needed
+                          let processedUrl = url;
+                          const driveFileId = url.match(/\/file\/d\/([a-zA-Z0-9-_]+)/)?.[1] || url.match(/[?&]id=([a-zA-Z0-9-_]+)/)?.[1];
+                          if (driveFileId) {
+                            processedUrl = `https://drive.google.com/thumbnail?id=${driveFileId}&sz=w800-h600`;
+                          }
+                          
+                          handleChange('images', [...currentImages, processedUrl]);
+                          input.value = '';
+                        }
+                      }
+                    }
+                  }}
+                />
+                <button
+                  type="button"
+                  className="px-3 py-2 bg-blue-500 text-white rounded text-sm hover:bg-blue-600"
+                  onClick={(e) => {
+                    const input = (e.target as HTMLElement).previousElementSibling as HTMLInputElement;
+                    const url = input.value.trim();
+                    if (url && url.startsWith('http')) {
+                      const currentImages = (formData.images as string[]) || [];
+                      if (currentImages.length < 10) {
+                        // Convert Google Drive URL if needed
+                        let processedUrl = url;
+                        const driveFileId = url.match(/\/file\/d\/([a-zA-Z0-9-_]+)/)?.[1] || url.match(/[?&]id=([a-zA-Z0-9-_]+)/)?.[1];
+                        if (driveFileId) {
+                          processedUrl = `https://drive.google.com/thumbnail?id=${driveFileId}&sz=w800-h600`;
+                        }
+                        
+                        handleChange('images', [...currentImages, processedUrl]);
+                        input.value = '';
+                      }
+                    }
+                  }}
+                >
+                  Add URL
+                </button>
+              </div>
+            </div>
             <div className="text-xs text-gray-500 mt-2 space-y-1">
               <p>
                 <strong>Google Drive Setup:</strong> Right-click image → Share → "Anyone with the link" → Copy link. 
