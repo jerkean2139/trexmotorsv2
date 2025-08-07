@@ -63,11 +63,18 @@ export default function Header() {
               >
                 Contact
               </button>
-              <Link href="/admin">
-                <Button className="bg-trex-green text-white hover:bg-trex-green text-sm font-medium">
+              {/* Admin link - only show on production */}
+              {typeof window !== 'undefined' && !window.location.href.includes('localhost') && !window.location.href.includes('replit.dev') && (
+                <a 
+                  href="https://admin.trexmotors.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-gray-600 hover:text-trex-green px-3 py-2 text-sm font-medium transition-colors"
+                >
                   Admin
-                </Button>
-              </Link>
+                </a>
+              )}
+
             </div>
           </nav>
 
@@ -104,11 +111,23 @@ export default function Header() {
                   >
                     Contact
                   </button>
-                  <Link href="/admin">
-                    <Button className="bg-trex-green text-white w-full mt-4">
-                      Admin Login
-                    </Button>
-                  </Link>
+                  {/* Admin link - only show on production */}
+                  {typeof window !== 'undefined' && !window.location.href.includes('localhost') && !window.location.href.includes('replit.dev') ? (
+                    <a 
+                      href="https://admin.trexmotors.com"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-gray-600 hover:text-trex-green block px-3 py-2 text-base font-medium text-left"
+                    >
+                      Admin
+                    </a>
+                  ) : (
+                    <Link href="/admin">
+                      <Button className="bg-trex-green text-white w-full mt-4">
+                        Admin Login
+                      </Button>
+                    </Link>
+                  )}
                 </div>
               </SheetContent>
             </Sheet>
