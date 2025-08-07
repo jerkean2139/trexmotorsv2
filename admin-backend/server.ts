@@ -147,6 +147,28 @@ app.delete('/api/vehicles/:id', requireAuth, async (req, res) => {
   }
 });
 
+// Inquiry routes (admin only)
+app.get('/api/inquiries', requireAuth, async (req, res) => {
+  try {
+    const inquiries = await db.select().from(schema.inquiries);
+    res.json(inquiries);
+  } catch (error) {
+    console.error('Error fetching inquiries:', error);
+    res.status(500).json({ message: 'Failed to fetch inquiries' });
+  }
+});
+
+// Financing application routes (admin only)
+app.get('/api/financing-applications', requireAuth, async (req, res) => {
+  try {
+    const applications = await db.select().from(schema.financingApplications);
+    res.json(applications);
+  } catch (error) {
+    console.error('Error fetching financing applications:', error);
+    res.status(500).json({ message: 'Failed to fetch financing applications' });
+  }
+});
+
 // Public API for Netlify frontend (no auth required)
 app.get('/api/public/vehicles', async (req, res) => {
   try {
@@ -165,6 +187,29 @@ app.get('/api/public/vehicles/featured', async (req, res) => {
   } catch (error) {
     console.error('Error fetching featured vehicles:', error);
     res.status(500).json({ message: 'Failed to fetch featured vehicles' });
+  }
+});
+
+// Public submission endpoints (no auth required)
+app.post('/api/public/inquiries', async (req, res) => {
+  try {
+    const inquiryData = req.body;
+    const [inquiry] = await db.insert(schema.inquiries).values(inquiryData).returning();
+    res.json(inquiry);
+  } catch (error) {
+    console.error('Error creating inquiry:', error);
+    res.status(500).json({ message: 'Failed to create inquiry' });
+  }
+});
+
+app.post('/api/public/financing-applications', async (req, res) => {
+  try {
+    const applicationData = req.body;
+    const [application] = await db.insert(schema.financingApplications).values(applicationData).returning();
+    res.json(application);
+  } catch (error) {
+    console.error('Error creating financing application:', error);
+    res.status(500).json({ message: 'Failed to create financing application' });
   }
 });
 

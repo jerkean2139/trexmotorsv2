@@ -56,18 +56,43 @@ export const vehicles = pgTable("vehicles", {
 export const inquiries = pgTable("inquiries", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
   vehicleId: varchar("vehicle_id").references(() => vehicles.id),
-  customerName: varchar("customer_name").notNull(),
-  customerEmail: varchar("customer_email").notNull(),
-  customerPhone: varchar("customer_phone"),
+  firstName: varchar("first_name").notNull(),
+  lastName: varchar("last_name").notNull(),
+  email: varchar("email").notNull(),
+  phone: varchar("phone").notNull(),
+  interestType: varchar("interest_type").notNull(),
   message: text("message"),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+// Financing Applications table
+export const financingApplications = pgTable("financing_applications", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  firstName: varchar("first_name").notNull(),
+  lastName: varchar("last_name").notNull(),
+  email: varchar("email").notNull(),
+  phone: varchar("phone").notNull(),
+  address: varchar("address").notNull(),
+  city: varchar("city").notNull(),
+  state: varchar("state").notNull(),
+  zipCode: varchar("zip_code").notNull(),
+  employmentStatus: varchar("employment_status").notNull(),
+  monthlyIncome: varchar("monthly_income").notNull(),
+  creditScore: varchar("credit_score"),
+  downPayment: varchar("down_payment"),
+  vehicleInterest: text("vehicle_interest"),
+  additionalInfo: text("additional_info"),
   createdAt: timestamp("created_at").defaultNow(),
 });
 
 // Zod schemas
 export const insertVehicleSchema = createInsertSchema(vehicles);
 export const insertInquirySchema = createInsertSchema(inquiries);
+export const insertFinancingApplicationSchema = createInsertSchema(financingApplications);
 
 export type Vehicle = typeof vehicles.$inferSelect;
 export type InsertVehicle = z.infer<typeof insertVehicleSchema>;
 export type Inquiry = typeof inquiries.$inferSelect;
 export type InsertInquiry = z.infer<typeof insertInquirySchema>;
+export type FinancingApplication = typeof financingApplications.$inferSelect;
+export type InsertFinancingApplication = z.infer<typeof insertFinancingApplicationSchema>;
