@@ -128,7 +128,7 @@ export default function VehicleCard({ vehicle, onClick }: VehicleCardProps) {
             {formatPrice(vehicle.price)}
           </span>
           <Button 
-            className="bg-gray-900 hover:bg-gray-800 text-white"
+            className="bg-gray-900 hover:bg-gray-800 text-white flex items-center justify-center"
             onClick={(e) => {
               e.stopPropagation();
               onClick(vehicle);

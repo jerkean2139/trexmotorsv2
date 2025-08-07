@@ -154,14 +154,15 @@ export default function SearchFilters({ filters, onFilterChange }: SearchFilters
             <div className="flex items-end gap-2">
               <Button 
                 onClick={applyFilters}
-                className="bg-trex-green hover:bg-trex-green text-white flex-1"
+                className="bg-trex-green hover:bg-trex-green text-white flex-1 flex items-center justify-center"
               >
-                <i className="fas fa-filter mr-2"></i>Apply
+                <i className="fas fa-filter mr-2 flex-shrink-0"></i>
+                <span>Apply</span>
               </Button>
               <Button 
                 onClick={clearFilters}
                 variant="outline"
-                className="border-trex-green text-trex-green hover:bg-trex-green hover:text-white"
+                className="border-trex-green text-trex-green hover:bg-trex-green hover:text-white flex items-center justify-center"
               >
                 Clear
               </Button>
