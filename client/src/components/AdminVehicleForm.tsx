@@ -417,7 +417,8 @@ Or any other direct image URLs...`}
                   // Convert to direct image URL if we found a file ID
                   if (driveFileId) {
                     console.log('Converting Google Drive URL:', url, 'to ID:', driveFileId);
-                    return `https://drive.google.com/uc?export=view&id=${driveFileId}`;
+                    // Use the more reliable Google Drive image URL format
+                    return `https://drive.google.com/thumbnail?id=${driveFileId}&sz=w800-h600`;
                   }
                   
                   // Return as-is if not a Google Drive URL
@@ -431,10 +432,10 @@ Or any other direct image URLs...`}
             <div className="text-xs text-gray-500 mt-2 space-y-1">
               <p>
                 <strong>Google Drive Setup:</strong> Right-click image → Share → "Anyone with the link" → Copy link. 
-                Paste sharing links (they'll be converted automatically) or direct image URLs. Maximum 10 images per vehicle.
+                Paste sharing links (they'll be converted automatically). Press Enter for new line. Maximum 10 images per vehicle.
               </p>
               <p className="text-xs text-blue-600">
-                <strong>Pro tip:</strong> For better image loading, use: https://drive.google.com/uc?export=view&id=YOUR_FILE_ID
+                <strong>Multiple images:</strong> Paste one URL per line - each line will become a separate image
               </p>
               <p>
                 <strong>Supported formats:</strong> drive.google.com/file/d/FILE_ID/view, drive.google.com/open?id=FILE_ID, or direct image URLs
@@ -471,9 +472,22 @@ Or any other direct image URLs...`}
                         src={imageUrl}
                         alt={`Vehicle image ${index + 1}`}
                         className="w-full h-24 object-cover rounded border-2 border-gray-200 group-hover:border-trex-green transition-colors"
+                        crossOrigin="anonymous"
+                        referrerPolicy="no-referrer"
                         onLoad={() => console.log(`Image ${index + 1} loaded successfully:`, imageUrl)}
                         onError={(e) => {
                           console.error(`Image ${index + 1} failed to load:`, imageUrl);
+                          // Try alternative Google Drive format if original fails
+                          if (imageUrl.includes('drive.google.com/thumbnail?id=')) {
+                            const fileId = imageUrl.match(/id=([a-zA-Z0-9-_]+)/)?.[1];
+                            if (fileId) {
+                              const altUrl = `https://lh3.googleusercontent.com/d/${fileId}`;
+                              console.log(`Trying alternative URL:`, altUrl);
+                              (e.target as HTMLImageElement).src = altUrl;
+                              return;
+                            }
+                          }
+                          // Fallback to placeholder
                           (e.target as HTMLImageElement).src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjI0IiBoZWlnaHQ9IjI0IiBmaWxsPSIjZjNmNGY2Ii8+CjxwYXRoIGQ9Im0xNSAxMi0zLTMtMy4wMDEgM20xLjUtMi41YTEuNSAxLjUgMCAxIDEgMC0zIDEuNSAxLjUgMCAwIDEgMCAzem0tNi0yaDEwdjhoLTEweiIgc3Ryb2tlPSIjOWNhM2FmIiBzdHJva2Utd2lkdGg9IjEuNSIgZmlsbD0ibm9uZSIvPgo8L3N2Zz4K';
                         }}
                       />
