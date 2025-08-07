@@ -511,10 +511,15 @@ Press Enter after each URL to add it as a separate image...`}
           {formData.images && formData.images.length > 0 && (
             <div>
               <div className="flex justify-between items-center">
-                <Label className="text-sm text-gray-600">
-                  Image Preview ({formData.images.length}/10) 
-                  {formData.images.length >= 10 && <span className="text-orange-600 ml-1">(Maximum reached)</span>}
-                </Label>
+                <div>
+                  <Label className="text-sm text-gray-600">
+                    Image Preview ({formData.images.length}/10) 
+                    {formData.images.length >= 10 && <span className="text-orange-600 ml-1">(Maximum reached)</span>}
+                  </Label>
+                  <p className="text-xs text-blue-600 mt-1">
+                    ✨ <strong>New:</strong> Drag and drop images to reorder them! The first image (★) will be the featured image on your website.
+                  </p>
+                </div>
                 <Button
                   type="button"
                   variant="outline"
@@ -531,7 +536,44 @@ Press Enter after each URL to add it as a separate image...`}
                   console.log(`Rendering image ${index + 1}:`, imageUrl);
                   
                   return (
-                    <div key={index} className="relative group">
+                    <div 
+                      key={index} 
+                      className="relative group cursor-move"
+                      draggable
+                      onDragStart={(e) => {
+                        e.dataTransfer.setData('text/plain', index.toString());
+                        e.currentTarget.classList.add('opacity-50');
+                      }}
+                      onDragEnd={(e) => {
+                        e.currentTarget.classList.remove('opacity-50');
+                      }}
+                      onDragOver={(e) => {
+                        e.preventDefault();
+                        e.currentTarget.classList.add('border-trex-green', 'border-4');
+                      }}
+                      onDragLeave={(e) => {
+                        e.currentTarget.classList.remove('border-trex-green', 'border-4');
+                      }}
+                      onDrop={(e) => {
+                        e.preventDefault();
+                        e.currentTarget.classList.remove('border-trex-green', 'border-4');
+                        
+                        const dragIndex = parseInt(e.dataTransfer.getData('text/plain'));
+                        const hoverIndex = index;
+                        
+                        if (dragIndex === hoverIndex) return;
+                        
+                        const images = [...(formData.images as string[])];
+                        const draggedImage = images[dragIndex];
+                        
+                        // Remove dragged image from its original position
+                        images.splice(dragIndex, 1);
+                        // Insert it at the new position
+                        images.splice(hoverIndex, 0, draggedImage);
+                        
+                        handleChange('images', images);
+                      }}
+                    >
                       <img
                         src={imageUrl}
                         alt={`Vehicle image ${index + 1}`}
@@ -555,8 +597,12 @@ Press Enter after each URL to add it as a separate image...`}
                           (e.target as HTMLImageElement).src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjI0IiBoZWlnaHQ9IjI0IiBmaWxsPSIjZjNmNGY2Ii8+CjxwYXRoIGQ9Im0xNSAxMi0zLTMtMy4wMDEgM20xLjUtMi41YTEuNSAxLjUgMCAxIDEgMC0zIDEuNSAxLjUgMCAwIDEgMCAzem0tNi0yaDEwdjhoLTEweiIgc3Ryb2tlPSIjOWNhM2FmIiBzdHJva2Utd2lkdGg9IjEuNSIgZmlsbD0ibm9uZSIvPgo8L3N2Zz4K';
                         }}
                       />
-                      <div className="absolute top-1 right-1 bg-black bg-opacity-70 text-white text-xs px-1 rounded">
+                      <div className="absolute top-1 right-1 bg-black bg-opacity-70 text-white text-xs px-1 rounded flex items-center gap-1">
+                        {index === 0 && <span className="text-yellow-300">★</span>}
                         {index + 1}
+                      </div>
+                      <div className="absolute top-1 left-1 bg-black bg-opacity-70 text-white text-xs px-1 rounded opacity-0 group-hover:opacity-100 transition-opacity">
+                        ⋮⋮
                       </div>
                       <div className="absolute bottom-0 left-0 right-0 bg-black bg-opacity-50 text-white text-xs p-1 truncate opacity-0 group-hover:opacity-100 transition-opacity">
                         {imageUrl.length > 30 ? `${imageUrl.substring(0, 30)}...` : imageUrl}
@@ -565,7 +611,7 @@ Press Enter after each URL to add it as a separate image...`}
                         type="button"
                         variant="destructive"
                         size="sm"
-                        className="absolute top-1 left-1 opacity-0 group-hover:opacity-100 transition-opacity w-6 h-6 p-0"
+                        className="absolute bottom-1 right-1 opacity-0 group-hover:opacity-100 transition-opacity w-6 h-6 p-0"
                         onClick={() => {
                           const updatedImages = (formData.images as string[])?.filter((_, i) => i !== index) || [];
                           handleChange('images', updatedImages);
