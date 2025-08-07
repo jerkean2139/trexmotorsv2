@@ -5,8 +5,11 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div>
             <div className="flex items-center mb-4">
-              <i className="fas fa-car text-trex-green text-2xl mr-2"></i>
-              <span className="text-xl font-bold">T-Rex Motors</span>
+              <img 
+                src="https://storage.googleapis.com/msgsndr/QjiQRR74D1pxPF7I8fcC/media/68042afc29d629c59c352a2b.png" 
+                alt="T-Rex Motors Logo" 
+                className="w-[140px] sm:w-[160px] h-auto"
+              />
             </div>
             <p className="text-gray-400 mb-4">
               Richmond's premier used car dealership, serving customers with quality vehicles and exceptional service since 2010.
