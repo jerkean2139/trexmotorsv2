@@ -7,6 +7,7 @@ import VehicleCard from "@/components/VehicleCard";
 import VehicleDetail from "@/components/VehicleDetail";
 import { Button } from "@/components/ui/button";
 import type { Vehicle } from "@shared/schema";
+import { getVehiclesForNetlify, getFeaturedVehiclesForNetlify } from "@/lib/realVehicleData";
 
 export default function Home() {
   const [selectedVehicle, setSelectedVehicle] = useState<Vehicle | null>(null);
@@ -38,9 +39,9 @@ export default function Home() {
         if (!response.ok) throw new Error("Failed to fetch vehicles");
         return response.json();
       } catch (error) {
-        // Fallback to exported data for static deployment
-        const { getVehicles } = await import("@/lib/exportedVehicles");
-        return getVehicles(queryKey[1]);
+        // Fallback to real vehicle data for static deployment
+        console.log("API unavailable, using real vehicle data");
+        return getVehiclesForNetlify(queryKey[1]);
       }
     },
   });
@@ -53,9 +54,9 @@ export default function Home() {
         if (!response.ok) throw new Error("Failed to fetch featured vehicles");
         return response.json();
       } catch (error) {
-        // Fallback to exported data for static deployment
-        const { getFeaturedVehicles } = await import("@/lib/exportedVehicles");
-        return getFeaturedVehicles();
+        // Fallback to real vehicle data for static deployment  
+        console.log("Featured API unavailable, using real vehicle data");
+        return getFeaturedVehiclesForNetlify();
       }
     },
   });
