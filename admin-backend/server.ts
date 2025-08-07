@@ -42,6 +42,7 @@ const sessionStore = new pgStore({
 app.use(cors({
   origin: [
     'https://trexmotorsrichmond.netlify.app',
+    'https://trexmotors.com',
     'http://localhost:3000',
     'http://localhost:5173'
   ],
