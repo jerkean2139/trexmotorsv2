@@ -105,7 +105,7 @@ export default function AdminVehicleForm({ vehicle, onSuccess, onCancel }: Admin
   };
 
   const handleUploadComplete = async (result: UploadResult<Record<string, unknown>, Record<string, unknown>>) => {
-    const uploadedUrls = result.successful.map(file => file.uploadURL);
+    const uploadedUrls = result.successful?.map(file => file.uploadURL as string) || [];
     const currentImages = formData.images || [];
     setFormData({
       ...formData,
@@ -354,7 +354,7 @@ export default function AdminVehicleForm({ vehicle, onSuccess, onCancel }: Admin
           <div className="space-y-1">
             {formData.features?.map((feature, index) => (
               <div key={index} className="flex items-center justify-between bg-gray-50 p-2 rounded">
-                <span>{feature}</span>
+                <span>{feature as string}</span>
                 <Button
                   type="button"
                   variant="ghost"
@@ -417,7 +417,7 @@ export default function AdminVehicleForm({ vehicle, onSuccess, onCancel }: Admin
                 {formData.images.map((image, index) => (
                   <div key={index} className="relative group">
                     <img
-                      src={image}
+                      src={image as string}
                       alt={`Vehicle image ${index + 1}`}
                       className="w-full h-24 object-cover rounded border-2 border-gray-200 group-hover:border-trex-green"
                     />
@@ -445,8 +445,8 @@ export default function AdminVehicleForm({ vehicle, onSuccess, onCancel }: Admin
       <div className="flex items-center space-x-2">
         <Checkbox
           id="isFeatured"
-          checked={formData.isFeatured}
-          onCheckedChange={(checked) => handleChange('isFeatured', checked)}
+          checked={formData.isFeatured || false}
+          onCheckedChange={(checked) => handleChange('isFeatured', !!checked)}
         />
         <Label htmlFor="isFeatured">Featured Vehicle</Label>
       </div>

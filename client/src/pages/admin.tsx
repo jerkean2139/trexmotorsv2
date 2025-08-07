@@ -4,7 +4,9 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Badge } from "@/components/ui/badge";
 import AdminVehicleForm from "@/components/AdminVehicleForm";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
@@ -15,6 +17,9 @@ export default function Admin() {
   const [showAddModal, setShowAddModal] = useState(false);
   const [editingVehicle, setEditingVehicle] = useState<Vehicle | null>(null);
   const [loginForm, setLoginForm] = useState({ username: "admin", password: "trex2025!" });
+  const [searchQuery, setSearchQuery] = useState("");
+  const [statusFilter, setStatusFilter] = useState("all");
+  const [yearFilter, setYearFilter] = useState("all");
   const queryClient = useQueryClient();
   const { toast } = useToast();
 
@@ -97,6 +102,24 @@ export default function Admin() {
     }).format(parseFloat(price));
   };
 
+  // Filter vehicles based on search and filters
+  const vehicles = (vehiclesData as { vehicles?: Vehicle[] })?.vehicles || [];
+  const filteredVehicles = vehicles.filter((vehicle: Vehicle) => {
+    const matchesSearch = searchQuery === "" || 
+      `${vehicle.make} ${vehicle.model} ${vehicle.vin} ${vehicle.stockNumber}`.toLowerCase().includes(searchQuery.toLowerCase());
+    
+    const matchesStatus = statusFilter === "all" || vehicle.status === statusFilter;
+    const matchesYear = yearFilter === "all" || vehicle.year.toString() === yearFilter;
+    
+    return matchesSearch && matchesStatus && matchesYear;
+  });
+
+  // Calculate statistics
+  const totalVehicles = vehicles.length;
+  const availableVehicles = vehicles.filter((v: Vehicle) => v.status === 'available').length;
+  const soldVehicles = vehicles.filter((v: Vehicle) => v.status === 'sold').length;
+  const pendingVehicles = vehicles.filter((v: Vehicle) => v.status === 'pending').length;
+
   // Show login form if not authenticated
   if (!isAuthenticated && !authData?.isAuthenticated) {
     return (
@@ -145,168 +168,262 @@ export default function Admin() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-100">
-      <div className="flex">
-        {/* Sidebar */}
-        <div className="w-64 bg-gray-900 text-white min-h-screen">
-          <div className="p-6">
-            <div className="flex items-center mb-8">
-              <i className="fas fa-car text-trex-green text-2xl mr-2"></i>
-              <span className="text-xl font-bold">T-Rex Admin</span>
+    <div className="min-h-screen bg-gray-50">
+      {/* Green Header Bar */}
+      <div className="bg-[#4CAF50] text-white px-6 py-4">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center">
+            <div className="w-10 h-10 bg-white rounded-lg flex items-center justify-center mr-3">
+              <i className="fas fa-car text-[#4CAF50] text-lg"></i>
             </div>
-            <nav className="space-y-2">
-              <a href="#" className="block px-4 py-2 rounded bg-gray-800 text-trex-green font-medium">
-                <i className="fas fa-car mr-2"></i>Vehicle Management
-              </a>
-              <a href="#" className="block px-4 py-2 rounded hover:bg-gray-800 text-gray-300">
-                <i className="fas fa-envelope mr-2"></i>Customer Inquiries
-              </a>
-              <a href="#" className="block px-4 py-2 rounded hover:bg-gray-800 text-gray-300">
-                <i className="fas fa-chart-bar mr-2"></i>Sales Reports
-              </a>
-              <a href="#" className="block px-4 py-2 rounded hover:bg-gray-800 text-gray-300">
-                <i className="fas fa-cog mr-2"></i>Settings
-              </a>
-              <button 
-                className="block w-full text-left px-4 py-2 rounded hover:bg-gray-800 text-gray-300"
-                onClick={handleLogout}
-              >
-                <i className="fas fa-sign-out-alt mr-2"></i>Logout
-              </button>
-            </nav>
+            <div>
+              <h1 className="text-xl font-bold">T-Rex Motors Admin</h1>
+              <p className="text-green-100 text-sm">Enhanced Vehicle Management System</p>
+            </div>
+          </div>
+          <div className="flex items-center gap-4">
+            <Button 
+              onClick={() => setShowAddModal(true)}
+              className="bg-white text-[#4CAF50] hover:bg-gray-100 font-medium"
+            >
+              + Add New Vehicle
+            </Button>
+            <Button 
+              onClick={handleLogout}
+              variant="ghost"
+              className="text-white hover:bg-green-600"
+            >
+              Logout
+            </Button>
+          </div>
+        </div>
+      </div>
+
+      {/* Statistics Cards */}
+      <div className="p-6">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
+          <Card className="border-l-4 border-l-[#4CAF50]">
+            <CardContent className="p-4">
+              <div className="flex items-center">
+                <div className="w-10 h-10 bg-[#4CAF50] rounded-lg flex items-center justify-center mr-3">
+                  <i className="fas fa-car text-white"></i>
+                </div>
+                <div>
+                  <p className="text-sm text-gray-500">Total Vehicles</p>
+                  <p className="text-2xl font-bold text-[#4CAF50]">{totalVehicles}</p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+          
+          <Card className="border-l-4 border-l-[#4CAF50]">
+            <CardContent className="p-4">
+              <div className="flex items-center">
+                <div className="w-10 h-10 bg-[#4CAF50] rounded-lg flex items-center justify-center mr-3">
+                  <i className="fas fa-car text-white"></i>
+                </div>
+                <div>
+                  <p className="text-sm text-gray-500">For Sale</p>
+                  <p className="text-2xl font-bold text-[#4CAF50]">{availableVehicles}</p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="border-l-4 border-l-green-500">
+            <CardContent className="p-4">
+              <div className="flex items-center">
+                <div className="w-10 h-10 bg-green-500 rounded-lg flex items-center justify-center mr-3">
+                  <i className="fas fa-check text-white"></i>
+                </div>
+                <div>
+                  <p className="text-sm text-gray-500">Sold</p>
+                  <p className="text-2xl font-bold text-red-500">{soldVehicles}</p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="border-l-4 border-l-yellow-500">
+            <CardContent className="p-4">
+              <div className="flex items-center">
+                <div className="w-10 h-10 bg-yellow-500 rounded-lg flex items-center justify-center mr-3">
+                  <i className="fas fa-clock text-white"></i>
+                </div>
+                <div>
+                  <p className="text-sm text-gray-500">Pending</p>
+                  <p className="text-2xl font-bold text-yellow-600">{pendingVehicles}</p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Search & Filter */}
+        <div className="bg-white p-4 rounded-lg shadow mb-6">
+          <h3 className="text-lg font-semibold mb-4">Search & Filter</h3>
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <Input
+              placeholder="Search by make, model, VIN..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+            <Select value={statusFilter} onValueChange={setStatusFilter}>
+              <SelectTrigger>
+                <SelectValue placeholder="All Status" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Status</SelectItem>
+                <SelectItem value="available">Available</SelectItem>
+                <SelectItem value="pending">Pending</SelectItem>
+                <SelectItem value="sold">Sold</SelectItem>
+              </SelectContent>
+            </Select>
+            <Select value={yearFilter} onValueChange={setYearFilter}>
+              <SelectTrigger>
+                <SelectValue placeholder="All Years" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Years</SelectItem>
+                {Array.from(new Set(vehicles.map((v: Vehicle) => v.year.toString())))
+                  .sort((a: string, b: string) => parseInt(b) - parseInt(a))
+                  .map((year: string) => (
+                    <SelectItem key={year} value={year}>{year}</SelectItem>
+                  ))}
+              </SelectContent>
+            </Select>
+            <Button 
+              variant="outline" 
+              onClick={() => {
+                setSearchQuery("");
+                setStatusFilter("all");
+                setYearFilter("all");
+              }}
+              className="w-full"
+            >
+              × Clear Filters
+            </Button>
           </div>
         </div>
 
-        {/* Main Content */}
-        <div className="flex-1">
-          {/* Header */}
-          <div className="bg-white shadow-sm border-b px-6 py-4">
-            <div className="flex justify-between items-center">
-              <h1 className="text-2xl font-bold text-gray-900">Vehicle Management</h1>
-              <Button 
-                onClick={() => setShowAddModal(true)}
-                className="bg-trex-green hover:bg-trex-green text-white"
-              >
-                <i className="fas fa-plus mr-2"></i>Add New Vehicle
-              </Button>
-            </div>
+        {/* Vehicle Cards Grid */}
+        {isLoading ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {[...Array(6)].map((_, i) => (
+              <div key={i} className="h-80 bg-gray-200 rounded-lg animate-pulse"></div>
+            ))}
           </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {filteredVehicles.map((vehicle: Vehicle) => (
+              <Card key={vehicle.id} className="overflow-hidden hover:shadow-lg transition-shadow">
+                <div className="relative">
+                  {vehicle.statusBanner && (
+                    <div className="absolute top-2 left-2 z-10">
+                      <Badge 
+                        variant="secondary" 
+                        className={`text-white font-semibold ${
+                          vehicle.statusBanner === 'new' ? 'bg-blue-500' :
+                          vehicle.statusBanner === 'low-miles' ? 'bg-green-500' :
+                          vehicle.statusBanner === 'local-trade' ? 'bg-purple-500' :
+                          vehicle.statusBanner === 'just-reduced' ? 'bg-red-500' :
+                          vehicle.statusBanner === 'sold' ? 'bg-gray-500' :
+                          'bg-yellow-500'
+                        }`}
+                      >
+                        {vehicle.statusBanner === 'new' ? 'NEW' :
+                         vehicle.statusBanner === 'low-miles' ? 'LOW MILES' :
+                         vehicle.statusBanner === 'local-trade' ? 'LOCAL TRADE' :
+                         vehicle.statusBanner === 'just-reduced' ? 'JUST REDUCED' :
+                         vehicle.statusBanner === 'sold' ? 'SOLD' :
+                         'PENDING'}
+                      </Badge>
+                    </div>
+                  )}
+                  
+                  {vehicle.images?.[0] ? (
+                    <div className="relative">
+                      <img 
+                        src={vehicle.images[0]} 
+                        alt={`${vehicle.make} ${vehicle.model}`}
+                        className="w-full h-48 object-cover"
+                      />
+                      {vehicle.images.length > 1 && (
+                        <div className="absolute bottom-2 right-2 bg-black bg-opacity-60 text-white px-2 py-1 rounded text-sm">
+                          📷 {vehicle.images.length} photos
+                        </div>
+                      )}
+                    </div>
+                  ) : (
+                    <div className="w-full h-48 bg-gray-200 flex items-center justify-center">
+                      <i className="fas fa-car text-gray-400 text-4xl"></i>
+                    </div>
+                  )}
+                </div>
+                
+                <CardContent className="p-4">
+                  <div className="flex justify-between items-start mb-2">
+                    <h3 className="text-lg font-bold text-gray-900">
+                      {vehicle.year} {vehicle.make} {vehicle.model}
+                    </h3>
+                    <div className="text-right">
+                      <p className="text-lg font-bold text-[#4CAF50]">
+                        {formatPrice(vehicle.price)}
+                      </p>
+                    </div>
+                  </div>
+                  
+                  <div className="space-y-2 mb-4">
+                    <div className="flex items-center justify-between text-sm text-gray-600">
+                      <span>🛣️ {vehicle.mileage?.toLocaleString()} miles</span>
+                      <span>🎨 {vehicle.exteriorColor}</span>
+                    </div>
+                    <div className="flex items-center justify-between text-sm text-gray-600">
+                      <span>📋 {vehicle.stockNumber}</span>
+                      <span>🔧 {vehicle.transmission}</span>
+                    </div>
+                  </div>
 
-          {/* Vehicle Management Table */}
-          <div className="p-6">
-            <Card>
-              <CardHeader>
-                <div className="flex justify-between items-center">
-                  <CardTitle>Current Inventory</CardTitle>
-                  <div className="flex space-x-2">
-                    <Input 
-                      placeholder="Search vehicles..." 
-                      className="w-64"
-                    />
-                    <Button variant="outline" size="sm">
-                      <i className="fas fa-filter"></i>
+                  <div className="flex items-center justify-between">
+                    <div className="flex space-x-2">
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        className="text-blue-600 hover:text-blue-800"
+                        onClick={() => setEditingVehicle(vehicle)}
+                      >
+                        👁️ View
+                      </Button>
+                      <Button
+                        size="sm"
+                        className="bg-[#4CAF50] hover:bg-green-600 text-white"
+                        onClick={() => setEditingVehicle(vehicle)}
+                      >
+                        ✏️ Edit
+                      </Button>
+                    </div>
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      className="text-red-600 hover:text-red-800"
+                      onClick={() => handleDeleteVehicle(vehicle.id)}
+                    >
+                      🗑️
                     </Button>
                   </div>
-                </div>
-              </CardHeader>
-              <CardContent>
-                {isLoading ? (
-                  <div className="space-y-4">
-                    {[...Array(5)].map((_, i) => (
-                      <div key={i} className="h-16 bg-gray-200 rounded animate-pulse"></div>
-                    ))}
-                  </div>
-                ) : (
-                  <div className="overflow-x-auto">
-                    <table className="min-w-full divide-y divide-gray-200">
-                      <thead className="bg-gray-50">
-                        <tr>
-                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            Vehicle
-                          </th>
-                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            Year
-                          </th>
-                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            Mileage
-                          </th>
-                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            Price
-                          </th>
-                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            Status
-                          </th>
-                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            Actions
-                          </th>
-                        </tr>
-                      </thead>
-                      <tbody className="bg-white divide-y divide-gray-200">
-                        {vehiclesData?.vehicles?.map((vehicle: Vehicle) => (
-                          <tr key={vehicle.id}>
-                            <td className="px-6 py-4 whitespace-nowrap">
-                              <div className="flex items-center">
-                                {vehicle.images?.[0] && (
-                                  <div className="flex-shrink-0 h-12 w-16">
-                                    <img 
-                                      className="h-12 w-16 rounded object-cover" 
-                                      src={vehicle.images[0]} 
-                                      alt={`${vehicle.make} ${vehicle.model}`}
-                                    />
-                                  </div>
-                                )}
-                                <div className={vehicle.images?.[0] ? "ml-4" : ""}>
-                                  <div className="text-sm font-medium text-gray-900">
-                                    {vehicle.make} {vehicle.model}
-                                  </div>
-                                  <div className="text-sm text-gray-500">
-                                    {vehicle.trim}
-                                  </div>
-                                </div>
-                              </div>
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                              {vehicle.year}
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                              {vehicle.mileage?.toLocaleString()}
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                              {formatPrice(vehicle.price)}
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap">
-                              <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                                vehicle.status === 'available' 
-                                  ? 'bg-green-100 text-green-800' 
-                                  : 'bg-yellow-100 text-yellow-800'
-                              }`}>
-                                {vehicle.status}
-                              </span>
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
-                              <button 
-                                className="text-trex-green hover:text-green-800"
-                                onClick={() => setEditingVehicle(vehicle)}
-                              >
-                                <i className="fas fa-edit"></i>
-                              </button>
-                              <button 
-                                className="text-red-600 hover:text-red-900"
-                                onClick={() => handleDeleteVehicle(vehicle.id)}
-                              >
-                                <i className="fas fa-trash"></i>
-                              </button>
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
-                )}
-              </CardContent>
-            </Card>
+                </CardContent>
+              </Card>
+            ))}
           </div>
-        </div>
+        )}
+
+        {filteredVehicles.length === 0 && !isLoading && (
+          <div className="text-center py-12">
+            <i className="fas fa-car text-gray-300 text-6xl mb-4"></i>
+            <h3 className="text-xl font-semibold text-gray-600 mb-2">No vehicles found</h3>
+            <p className="text-gray-500">Try adjusting your search filters or add a new vehicle.</p>
+          </div>
+        )}
       </div>
 
       {/* Add Vehicle Modal */}
