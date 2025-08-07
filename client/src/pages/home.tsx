@@ -25,6 +25,12 @@ export default function Home() {
   const { data: vehiclesData, isLoading } = useQuery<{vehicles: Vehicle[], totalCount: number}>({
     queryKey: ["/api/vehicles", filters],
     queryFn: async ({ queryKey }) => {
+      // For static deployment, always use embedded data
+      if (typeof window !== 'undefined' && !window.location.href.includes('localhost') && !window.location.href.includes('replit')) {
+        console.log("Static deployment detected, using embedded vehicle data");
+        return getVehiclesForNetlify(queryKey[1]);
+      }
+      
       try {
         const [url, params] = queryKey;
         const searchParams = new URLSearchParams();
@@ -49,6 +55,12 @@ export default function Home() {
   const { data: featuredVehicles, isLoading: featuredLoading } = useQuery<Vehicle[]>({
     queryKey: ["/api/vehicles/featured"],
     queryFn: async () => {
+      // For static deployment, always use embedded data
+      if (typeof window !== 'undefined' && !window.location.href.includes('localhost') && !window.location.href.includes('replit')) {
+        console.log("Static deployment detected, using embedded featured vehicle data");
+        return getFeaturedVehiclesForNetlify();
+      }
+      
       try {
         const response = await fetch("/api/vehicles/featured");
         if (!response.ok) throw new Error("Failed to fetch featured vehicles");
