@@ -330,9 +330,47 @@ export default function AdminVehicleForm({ vehicle, onSuccess, onCancel }: Admin
       <div>
         <Label className="text-lg font-semibold">Vehicle Images</Label>
         <div className="space-y-4">
+          {/* Local File Upload */}
+          <div>
+            <Label className="text-sm text-gray-600">Upload Images from Computer</Label>
+            <input
+              type="file"
+              accept="image/*"
+              multiple
+              className="w-full p-2 border rounded text-sm"
+              onChange={(e) => {
+                const files = Array.from(e.target.files || []);
+                if (files.length > 0) {
+                  // Convert files to data URLs for preview
+                  const currentImages = (formData.images as string[]) || [];
+                  
+                  files.forEach((file, index) => {
+                    if (currentImages.length + index < 10) { // Limit to 10 total images
+                      const reader = new FileReader();
+                      reader.onload = (event) => {
+                        const dataUrl = event.target?.result as string;
+                        setFormData(prev => ({
+                          ...prev,
+                          images: [...(prev.images as string[] || []), dataUrl].slice(0, 10)
+                        }));
+                      };
+                      reader.readAsDataURL(file);
+                    }
+                  });
+                  
+                  // Clear the input
+                  e.target.value = '';
+                }
+              }}
+            />
+            <p className="text-xs text-gray-500 mt-1">
+              Select multiple image files from your computer (JPG, PNG, etc.). Maximum 10 images total per vehicle.
+            </p>
+          </div>
+
           {/* Bulk Image URL Input */}
           <div>
-            <Label className="text-sm text-gray-600">Google Drive Image URLs (one per line)</Label>
+            <Label className="text-sm text-gray-600">Or paste Google Drive URLs (one per line)</Label>
             <textarea
               className="w-full h-32 p-3 border rounded text-sm font-mono"
               placeholder={`Paste your Google Drive image URLs here, one per line (up to 10):
@@ -408,10 +446,21 @@ Or any other direct image URLs...`}
           {/* Image Preview */}
           {formData.images && formData.images.length > 0 && (
             <div>
-              <Label className="text-sm text-gray-600">
-                Image Preview ({formData.images.length}/10) 
-                {formData.images.length >= 10 && <span className="text-orange-600 ml-1">(Maximum reached)</span>}
-              </Label>
+              <div className="flex justify-between items-center">
+                <Label className="text-sm text-gray-600">
+                  Image Preview ({formData.images.length}/10) 
+                  {formData.images.length >= 10 && <span className="text-orange-600 ml-1">(Maximum reached)</span>}
+                </Label>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setFormData({ ...formData, images: [] })}
+                  className="text-xs"
+                >
+                  Clear All Images
+                </Button>
+              </div>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mt-2">
                 {formData.images.map((image, index) => {
                   const imageUrl = image as string;
