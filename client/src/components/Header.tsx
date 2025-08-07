@@ -39,12 +39,11 @@ export default function Header() {
               >
                 Inventory
               </button>
-              <button 
-                onClick={() => scrollToSection('financing')}
-                className="text-gray-600 hover:text-trex-green px-3 py-2 text-sm font-medium transition-colors"
-              >
-                Financing
-              </button>
+              <Link href="/financing">
+                <button className="text-gray-600 hover:text-trex-green px-3 py-2 text-sm font-medium transition-colors">
+                  Financing
+                </button>
+              </Link>
               <button 
                 onClick={() => scrollToSection('about')}
                 className="text-gray-600 hover:text-trex-green px-3 py-2 text-sm font-medium transition-colors"
@@ -81,12 +80,11 @@ export default function Header() {
                   >
                     Inventory
                   </button>
-                  <button 
-                    onClick={() => scrollToSection('financing')}
-                    className="text-gray-600 hover:text-trex-green block px-3 py-2 text-base font-medium text-left"
-                  >
-                    Financing
-                  </button>
+                  <Link href="/financing">
+                    <button className="text-gray-600 hover:text-trex-green block px-3 py-2 text-base font-medium text-left">
+                      Financing
+                    </button>
+                  </Link>
                   <button 
                     onClick={() => scrollToSection('about')}
                     className="text-gray-600 hover:text-trex-green block px-3 py-2 text-base font-medium text-left"
