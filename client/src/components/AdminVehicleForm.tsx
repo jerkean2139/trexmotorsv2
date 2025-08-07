@@ -379,12 +379,16 @@ https://drive.google.com/file/d/FILE_ID_2/view
 https://drive.google.com/uc?export=view&id=FILE_ID_3
 
 Or any other direct image URLs...`}
-              value={(formData.images as string[] || []).join('\n') || ''}
+              value={(formData.images as string[] || []).join('\n')}
               onChange={(e) => {
+                const textValue = e.target.value;
+                console.log('Textarea raw value:', textValue);
+                console.log('Lines found:', textValue.split('\n'));
+                
                 // Process URLs and convert Google Drive sharing links to direct image URLs
-                const rawUrls = e.target.value.split('\n')
+                const rawUrls = textValue.split('\n')
                   .map(url => url.trim())
-                  .filter(url => url.length > 0);
+                  .filter(url => url.length > 0 && url.startsWith('http'));
                 
                 // Convert Google Drive sharing links to direct image URLs
                 const processedUrls = rawUrls.map(url => {
@@ -435,10 +439,13 @@ Or any other direct image URLs...`}
                 Paste sharing links (they'll be converted automatically). Press Enter for new line. Maximum 10 images per vehicle.
               </p>
               <p className="text-xs text-blue-600">
-                <strong>Multiple images:</strong> Paste one URL per line - each line will become a separate image
+                <strong>Test multiline:</strong> Type any http URL, press Enter, type another URL - you should see each as a separate image
               </p>
               <p>
                 <strong>Supported formats:</strong> drive.google.com/file/d/FILE_ID/view, drive.google.com/open?id=FILE_ID, or direct image URLs
+              </p>
+              <p className="text-xs text-green-600">
+                Current URLs detected: {(formData.images as string[] || []).length}
               </p>
             </div>
           </div>
