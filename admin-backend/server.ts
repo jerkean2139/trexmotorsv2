@@ -167,6 +167,12 @@ app.get('/api/public/vehicles/featured', async (req, res) => {
   }
 });
 
-app.listen(PORT, () => {
-  console.log(`Admin backend running on port ${PORT}`);
-});
+// For Vercel deployment
+export default app;
+
+// For local development
+if (process.env.NODE_ENV !== 'production') {
+  app.listen(PORT, () => {
+    console.log(`Admin backend running on port ${PORT}`);
+  });
+}

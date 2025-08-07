@@ -18,11 +18,15 @@
 3. Set environment variables
 4. Deploy with custom domain
 
-### Option 3: Vercel
+### Option 3: Vercel (Your Choice)
 1. Install Vercel CLI: `npm i -g vercel`
 2. In admin-backend folder: `vercel --prod`
-3. Set environment variables in Vercel dashboard
-4. Configure custom domain
+3. Set environment variables in Vercel dashboard:
+   - `DATABASE_URL`
+   - `SESSION_SECRET`
+   - `NODE_ENV=production`
+4. Configure custom domain: `admin.trexmotors.com`
+5. Update frontend URL to your Vercel deployment
 
 ### Option 4: Render
 1. Connect GitHub repository
