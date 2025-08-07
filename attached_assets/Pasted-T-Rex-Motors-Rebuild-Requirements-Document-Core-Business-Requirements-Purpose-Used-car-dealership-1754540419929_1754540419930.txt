@@ -1,0 +1,60 @@
+T-Rex Motors Rebuild Requirements Document
+Core Business Requirements
+Purpose: Used car dealership website for T-Rex Motors in Richmond
+
+Customer-facing vehicle inventory browsing with search/filter capabilities
+Admin dashboard for vehicle management (CRUD operations)
+Professional automotive branding with green theme (#37ca37)
+Mobile-responsive design
+SEO optimization for local car sales
+Technical Stack (Simplified)
+Frontend: React 18 + TypeScript + Tailwind CSS + shadcn/ui components
+Backend: Node.js + Express + TypeScript
+Database: PostgreSQL with Drizzle ORM
+Routing: Wouter for client-side routing
+State Management: TanStack React Query
+Build: Vite for development and production builds
+Critical Architecture Decisions
+Single Vite Config: Create ONE vite.config.ts at project root with proper path aliases
+Clean Folder Structure:
+/client (React app)
+/server (Express API)
+/shared (shared types/schemas)
+Development vs Production: Use environment-based serving (Vite dev server vs static files)
+Database Schema: Vehicle entity with essential fields (make, model, year, price, images, description)
+Essential Features to Implement First
+Vehicle API endpoints (/api/vehicles GET, POST, PUT, DELETE)
+Customer homepage with hero section and vehicle grid
+Vehicle detail pages with image gallery
+Basic admin interface with authentication
+Responsive design with mobile-first approach
+Authentication & Security
+Simple token-based auth for admin (username: admin, password: trex2025!)
+Protected admin routes
+CORS configuration for API access
+Data Requirements
+Use real vehicle data structure (no mock data)
+Image upload capability (Replit object storage)
+Vehicle search/filter functionality
+Key Pitfalls to Avoid
+Don't create multiple conflicting build systems (avoid Rails/Ruby Vite configurations)
+Don't serve raw TypeScript files to browsers (always transpile)
+Set proper MIME types for all assets
+Use consistent path aliases throughout the application
+Avoid complex deployment scripts - keep it simple
+Success Criteria
+Customer site loads with vehicle inventory from database
+Admin can log in and manage vehicles
+Responsive design works on mobile/desktop
+No console errors or build warnings
+Clean, professional automotive styling
+Recommended Build Order
+Set up basic Express server with health check
+Configure PostgreSQL + Drizzle schema
+Create vehicle API endpoints
+Build simple React frontend with Vite
+Implement customer vehicle browsing
+Add admin authentication and dashboard
+Style with Tailwind + automotive theme
+Add image upload functionality
+The current project has overcomplicated the build process. Start fresh with modern, simple tooling and focus on core functionality first.
