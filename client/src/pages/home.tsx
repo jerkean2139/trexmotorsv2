@@ -25,9 +25,17 @@ export default function Home() {
   const { data: vehiclesData, isLoading } = useQuery<{vehicles: Vehicle[], totalCount: number}>({
     queryKey: ["/api/vehicles", filters],
     queryFn: async ({ queryKey }) => {
-      // For static deployment, always use embedded data
+      // Try admin backend first, fall back to embedded data
       if (typeof window !== 'undefined' && !window.location.href.includes('localhost') && !window.location.href.includes('replit.dev') && !window.location.href.includes('127.0.0.1')) {
-        console.log("Static deployment detected, using embedded vehicle data");
+        try {
+          const response = await fetch('https://admin.trexmotors.com/api/public/vehicles');
+          if (response.ok) {
+            console.log("Using live data from admin backend");
+            return await response.json();
+          }
+        } catch (error) {
+          console.log("Admin backend unavailable, using embedded vehicle data");
+        }
         return getVehicles(queryKey[1]);
       }
       
@@ -55,9 +63,17 @@ export default function Home() {
   const { data: featuredVehicles, isLoading: featuredLoading } = useQuery<Vehicle[]>({
     queryKey: ["/api/vehicles/featured"],
     queryFn: async () => {
-      // For static deployment, always use embedded data
+      // Try admin backend first, fall back to embedded data
       if (typeof window !== 'undefined' && !window.location.href.includes('localhost') && !window.location.href.includes('replit.dev') && !window.location.href.includes('127.0.0.1')) {
-        console.log("Static deployment detected, using embedded featured vehicle data");
+        try {
+          const response = await fetch('https://admin.trexmotors.com/api/public/vehicles/featured');
+          if (response.ok) {
+            console.log("Using live featured data from admin backend");
+            return await response.json();
+          }
+        } catch (error) {
+          console.log("Admin backend unavailable, using embedded featured vehicle data");
+        }
         return getFeaturedVehicles();
       }
       
