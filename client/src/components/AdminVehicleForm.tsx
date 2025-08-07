@@ -334,52 +334,79 @@ export default function AdminVehicleForm({ vehicle, onSuccess, onCancel }: Admin
           <div>
             <Label className="text-sm text-gray-600">Google Drive Image URLs (one per line)</Label>
             <textarea
-              className="w-full h-32 p-3 border rounded text-sm"
-              placeholder={`Paste your Google Drive image URLs here, one per line:
+              className="w-full h-32 p-3 border rounded text-sm font-mono"
+              placeholder={`Paste your Google Drive image URLs here, one per line (up to 10):
 
-https://drive.google.com/uc?export=view&id=FILE_ID_1
-https://drive.google.com/uc?export=view&id=FILE_ID_2
+https://drive.google.com/file/d/FILE_ID_1/view
+https://drive.google.com/file/d/FILE_ID_2/view
 https://drive.google.com/uc?export=view&id=FILE_ID_3
 
 Or any other direct image URLs...`}
               value={formData.images?.join('\n') || ''}
               onChange={(e) => {
-                const urls = e.target.value.split('\n').map(url => url.trim()).filter(url => url);
-                handleChange('images', urls);
+                // Process URLs and convert Google Drive sharing links to direct image URLs
+                const rawUrls = e.target.value.split('\n')
+                  .map(url => url.trim())
+                  .filter(url => url.length > 0);
+                
+                // Convert Google Drive sharing links to direct image URLs
+                const processedUrls = rawUrls.map(url => {
+                  // Handle Google Drive sharing links like: https://drive.google.com/file/d/FILE_ID/view
+                  const driveMatch = url.match(/\/file\/d\/([a-zA-Z0-9-_]+)/);
+                  if (driveMatch) {
+                    return `https://drive.google.com/uc?export=view&id=${driveMatch[1]}`;
+                  }
+                  return url;
+                }).slice(0, 10); // Limit to 10 images
+                
+                setFormData({ ...formData, images: processedUrls });
               }}
             />
             <p className="text-xs text-gray-500 mt-2">
               <strong>Google Drive Setup:</strong> Right-click image → Share → "Anyone with the link" → Copy link. 
-              Paste sharing links and they'll be converted to direct image URLs automatically.
+              Paste sharing links (they'll be converted automatically) or direct image URLs. Maximum 10 images per vehicle.
+              <br />
+              <strong>Supported formats:</strong> drive.google.com/file/d/FILE_ID/view or any direct image URL
             </p>
           </div>
           
           {/* Image Preview */}
           {formData.images && formData.images.length > 0 && (
             <div>
-              <Label className="text-sm text-gray-600">Image Preview ({formData.images.length})</Label>
-              <div className="grid grid-cols-3 md:grid-cols-4 gap-3 mt-2">
+              <Label className="text-sm text-gray-600">
+                Image Preview ({formData.images.length}/10) 
+                {formData.images.length >= 10 && <span className="text-orange-600 ml-1">(Maximum reached)</span>}
+              </Label>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mt-2">
                 {formData.images.map((image, index) => {
-                  // Convert Google Drive sharing links to direct image URLs for preview
-                  let imageUrl = image as string;
-                  const driveMatch = imageUrl.match(/\/file\/d\/([a-zA-Z0-9-_]+)/);
-                  if (driveMatch) {
-                    imageUrl = `https://drive.google.com/uc?export=view&id=${driveMatch[1]}`;
-                  }
+                  const imageUrl = image as string; // URLs are already processed in onChange
                   
                   return (
                     <div key={index} className="relative group">
                       <img
                         src={imageUrl}
                         alt={`Vehicle image ${index + 1}`}
-                        className="w-full h-24 object-cover rounded border-2 border-gray-200 group-hover:border-trex-green"
+                        className="w-full h-24 object-cover rounded border-2 border-gray-200 group-hover:border-trex-green transition-colors"
                         onError={(e) => {
                           (e.target as HTMLImageElement).src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjI0IiBoZWlnaHQ9IjI0IiBmaWxsPSIjZjNmNGY2Ii8+CjxwYXRoIGQ9Im0xNSAxMi0zLTMtMy4wMDEgM20xLjUtMi41YTEuNSAxLjUgMCAxIDEgMC0zIDEuNSAxLjUgMCAwIDEgMCAzem0tNi0yaDEwdjhoLTEweiIgc3Ryb2tlPSIjOWNhM2FmIiBzdHJva2Utd2lkdGg9IjEuNSIgZmlsbD0ibm9uZSIvPgo8L3N2Zz4K';
                         }}
                       />
-                      <div className="absolute bottom-1 left-1 bg-black bg-opacity-50 text-white text-xs px-1 rounded">
+                      <div className="absolute top-1 right-1 bg-black bg-opacity-70 text-white text-xs px-1 rounded">
                         {index + 1}
                       </div>
+                      <Button
+                        type="button"
+                        variant="destructive"
+                        size="sm"
+                        className="absolute top-1 left-1 opacity-0 group-hover:opacity-100 transition-opacity w-6 h-6 p-0"
+                        onClick={() => {
+                          const updatedImages = formData.images?.filter((_, i) => i !== index) || [];
+                          setFormData({ ...formData, images: updatedImages });
+                        }}
+                        title="Remove image"
+                      >
+                        ×
+                      </Button>
                     </div>
                   );
                 })}
