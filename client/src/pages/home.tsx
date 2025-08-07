@@ -7,7 +7,7 @@ import VehicleCard from "@/components/VehicleCard";
 import VehicleDetail from "@/components/VehicleDetail";
 import { Button } from "@/components/ui/button";
 import type { Vehicle } from "@shared/schema";
-import { getVehiclesForNetlify, getFeaturedVehiclesForNetlify } from "@/lib/realVehicleData";
+import { getVehicles, getFeaturedVehicles } from "@/lib/exportedVehicles";
 
 export default function Home() {
   const [selectedVehicle, setSelectedVehicle] = useState<Vehicle | null>(null);
@@ -28,7 +28,7 @@ export default function Home() {
       // For static deployment, always use embedded data
       if (typeof window !== 'undefined' && !window.location.href.includes('localhost') && !window.location.href.includes('replit')) {
         console.log("Static deployment detected, using embedded vehicle data");
-        return getVehiclesForNetlify(queryKey[1]);
+        return getVehicles(queryKey[1]);
       }
       
       try {
@@ -47,7 +47,7 @@ export default function Home() {
       } catch (error) {
         // Fallback to real vehicle data for static deployment
         console.log("API unavailable, using real vehicle data");
-        return getVehiclesForNetlify(queryKey[1]);
+        return getVehicles(queryKey[1]);
       }
     },
   });
@@ -58,7 +58,7 @@ export default function Home() {
       // For static deployment, always use embedded data
       if (typeof window !== 'undefined' && !window.location.href.includes('localhost') && !window.location.href.includes('replit')) {
         console.log("Static deployment detected, using embedded featured vehicle data");
-        return getFeaturedVehiclesForNetlify();
+        return getFeaturedVehicles();
       }
       
       try {
@@ -68,7 +68,7 @@ export default function Home() {
       } catch (error) {
         // Fallback to real vehicle data for static deployment  
         console.log("Featured API unavailable, using real vehicle data");
-        return getFeaturedVehiclesForNetlify();
+        return getFeaturedVehicles();
       }
     },
   });
