@@ -9,12 +9,7 @@ import { eq } from 'drizzle-orm';
 import ws from 'ws';
 import * as schema from './shared/schema.js';
 
-// Type declarations for session
-declare module 'express-session' {
-  interface SessionData {
-    isAuthenticated?: boolean;
-  }
-}
+// Express session types handled by express-session package
 
 neonConfig.webSocketConstructor = ws;
 
