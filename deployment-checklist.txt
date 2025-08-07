@@ -1,0 +1,52 @@
+T-REX MOTORS - NETLIFY DEPLOYMENT CHECKLIST
+
+□ STEP 1: DOWNLOAD PROJECT
+  □ Click 3-dot menu in Replit file explorer
+  □ Select "Download as zip" 
+  □ Extract zip file on your computer
+
+□ STEP 2: CREATE GITHUB REPOSITORY
+  □ Go to github.com and create new repository
+  □ Name: trex-motors-website
+  □ Make it public
+  □ Don't initialize with README
+
+□ STEP 3: UPLOAD CODE TO GITHUB
+  □ Open terminal in extracted project folder
+  □ Run: git init
+  □ Run: git add .
+  □ Run: git commit -m "Complete T-Rex Motors website"
+  □ Run: git branch -M main
+  □ Run: git remote add origin [YOUR_GITHUB_REPO_URL]
+  □ Run: git push -u origin main
+
+□ STEP 4: DEPLOY TO NETLIFY
+  □ Go to netlify.com and sign up/login
+  □ Click "Add new site" → "Import an existing project" 
+  □ Choose "Deploy with GitHub"
+  □ Select your trex-motors-website repository
+
+□ STEP 5: CONFIGURE BUILD SETTINGS
+  □ Build command: npm run build
+  □ Publish directory: dist/public
+  □ Node version: 18
+  □ Click "Deploy site"
+
+□ STEP 6: VERIFY DEPLOYMENT
+  □ Wait for build to complete
+  □ Visit your live site URL
+  □ Test vehicle browsing and search
+  □ Check navigation (About, Contact, Financing)
+  □ Verify mobile responsiveness
+
+✅ YOUR T-REX MOTORS WEBSITE IS LIVE!
+
+Build Configuration Files Created:
+- netlify.toml (Netlify settings)
+- deploy-to-netlify.sh (build script)
+- .nvmrc (Node version)
+- README.netlify.md (detailed guide)
+- DEPLOY_TO_NETLIFY_GUIDE.md (step-by-step)
+- deployment-checklist.txt (this file)
+
+Need help? Check DEPLOY_TO_NETLIFY_GUIDE.md for detailed instructions.
