@@ -26,6 +26,13 @@ export default function Header() {
                 src="https://storage.googleapis.com/msgsndr/QjiQRR74D1pxPF7I8fcC/media/68042afc29d629c59c352a2b.png" 
                 alt="T-Rex Motors Logo" 
                 className="w-[250px] h-[250px] object-contain"
+                onError={(e) => {
+                  const target = e.target as HTMLImageElement;
+                  target.style.display = 'none';
+                  const fallback = document.createElement('div');
+                  fallback.innerHTML = '<div class="flex items-center text-3xl font-bold text-green-600">🦖 T-Rex Motors</div>';
+                  target.parentNode?.appendChild(fallback);
+                }}
               />
             </Link>
           </div>
