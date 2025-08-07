@@ -2,22 +2,29 @@
 
 ## Quick Setup for `admin.trexmotors.com`
 
-### Option 1: Railway (Recommended)
-1. Push admin-backend folder to GitHub
-2. Connect Railway to GitHub repository
-3. Set environment variables:
+### Option 1: Replit Deployments (Recommended)
+1. Create new Replit with admin-backend files
+2. Set environment variables in Secrets:
    - `DATABASE_URL` (your Neon database URL)
    - `SESSION_SECRET` (random secure string)
    - `NODE_ENV=production`
-4. Deploy with custom domain: `admin.trexmotors.com`
+3. Click Deploy button in Replit
+4. Configure custom domain: `admin.trexmotors.com`
+5. Automatic HTTPS and scaling included
 
-### Option 2: Vercel
+### Option 2: Railway
+1. Push admin-backend folder to GitHub
+2. Connect Railway to GitHub repository
+3. Set environment variables
+4. Deploy with custom domain
+
+### Option 3: Vercel
 1. Install Vercel CLI: `npm i -g vercel`
 2. In admin-backend folder: `vercel --prod`
 3. Set environment variables in Vercel dashboard
 4. Configure custom domain
 
-### Option 3: Render
+### Option 4: Render
 1. Connect GitHub repository
 2. Create new Web Service
 3. Set build command: `npm run build`

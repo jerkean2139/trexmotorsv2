@@ -20,10 +20,10 @@ NODE_ENV=production
 ## Deployment
 
 This backend can be deployed to:
+- **Replit Deployments**: One-click deploy with automatic scaling
+- **Railway**: Connect GitHub and deploy  
 - **Vercel**: `vercel --prod`
-- **Railway**: Connect GitHub and deploy
 - **Render**: Connect GitHub and deploy
-- **Replit Deployments**: Deploy directly from Replit
 
 ## API Endpoints
 
