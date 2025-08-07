@@ -83,6 +83,7 @@ export default function Home() {
               <Button 
                 variant="outline"
                 className="border-2 border-white bg-white text-black hover:bg-white hover:text-trex-green px-8 py-3 text-lg font-semibold"
+                onClick={() => window.location.href = '/financing'}
               >
                 <i className="fas fa-calculator mr-2"></i>Get Financing
               </Button>
