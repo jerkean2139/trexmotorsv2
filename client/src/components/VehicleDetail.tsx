@@ -8,6 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
+import { useLocation } from "wouter";
 import type { Vehicle } from "@shared/schema";
 
 interface VehicleDetailProps {
@@ -26,6 +27,7 @@ export default function VehicleDetail({ vehicle, onClose }: VehicleDetailProps) 
     message: '',
   });
   const { toast } = useToast();
+  const [, setLocation] = useLocation();
 
   const inquiryMutation = useMutation({
     mutationFn: async (data: any) => {
@@ -35,15 +37,9 @@ export default function VehicleDetail({ vehicle, onClose }: VehicleDetailProps) 
       });
     },
     onSuccess: () => {
-      toast({ title: "Success", description: "Your inquiry has been sent successfully!" });
-      setInquiryForm({
-        firstName: '',
-        lastName: '',
-        email: '',
-        phone: '',
-        interestType: 'Schedule Test Drive',
-        message: '',
-      });
+      // Close the modal and redirect to thank you page
+      onClose();
+      setLocation('/thank-you');
     },
     onError: () => {
       toast({ title: "Error", description: "Failed to send inquiry. Please try again.", variant: "destructive" });
