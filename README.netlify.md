@@ -19,8 +19,8 @@ This is a full-stack application with a Node.js backend. For Netlify deployment,
    - Select your repository
 
 3. **Configure build settings:**
-   - Build command: `vite build --outDir client/dist`
-   - Publish directory: `client/dist`
+   - Build command: `npm run build`
+   - Publish directory: `dist`
    - Node version: `18`
 
 4. **Deploy:**
@@ -32,12 +32,12 @@ This is a full-stack application with a Node.js backend. For Netlify deployment,
 1. **Build the project locally:**
    ```bash
    # Build the frontend for production
-   vite build --outDir client/dist
+   npm run build
    ```
 
 2. **Deploy to Netlify:**
    - Go to [netlify.com](https://netlify.com)
-   - Drag and drop the `client/dist` folder to Netlify's deploy area
+   - Drag and drop the `dist` folder to Netlify's deploy area
 
 ## Configuration Files
 

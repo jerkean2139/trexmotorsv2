@@ -7,7 +7,7 @@ export const staticVehicles: Vehicle[] = [
     make: "Toyota",
     model: "Camry",
     year: 2020,
-    price: 22500,
+    price: "22500",
     mileage: 45000,
     exteriorColor: "Silver",
     interiorColor: "Black",
@@ -15,10 +15,12 @@ export const staticVehicles: Vehicle[] = [
     fuelType: "Gasoline",
     engine: "2.5L I4",
     drivetrain: "FWD",
-    bodyStyle: "Sedan",
+    trim: null,
+    seatingCapacity: 5,
     vin: "1HGBH41JXMN109186",
     stockNumber: "TR001",
     status: "available",
+    statusBanner: null,
     description: "Reliable and fuel-efficient sedan perfect for daily commuting. Well-maintained with complete service history.",
     features: ["Backup Camera", "Bluetooth", "Cruise Control", "Power Windows"],
     images: [
@@ -33,7 +35,7 @@ export const staticVehicles: Vehicle[] = [
     make: "Honda", 
     model: "CR-V",
     year: 2019,
-    price: 26800,
+    price: "26800",
     mileage: 38000,
     exteriorColor: "White",
     interiorColor: "Gray",
@@ -41,10 +43,12 @@ export const staticVehicles: Vehicle[] = [
     fuelType: "Gasoline", 
     engine: "1.5L Turbo",
     drivetrain: "AWD",
-    bodyStyle: "SUV",
+    trim: "EX",
+    seatingCapacity: 7,
     vin: "5J6RW2H85KA012345",
     stockNumber: "TR002",
     status: "available",
+    statusBanner: null,
     description: "Spacious and versatile SUV with all-wheel drive. Perfect for families and adventure seekers.",
     features: ["AWD", "Sunroof", "Heated Seats", "Apple CarPlay", "Lane Keeping Assist"],
     images: [
@@ -59,7 +63,7 @@ export const staticVehicles: Vehicle[] = [
     make: "Ford",
     model: "F-150", 
     year: 2021,
-    price: 35900,
+    price: "35900",
     mileage: 28000,
     exteriorColor: "Blue",
     interiorColor: "Black",
@@ -67,10 +71,12 @@ export const staticVehicles: Vehicle[] = [
     fuelType: "Gasoline",
     engine: "3.5L V6 EcoBoost",
     drivetrain: "4WD",
-    bodyStyle: "Truck",
+    trim: "XLT", 
+    seatingCapacity: 6,
     vin: "1FTFW1E51MFA12345",
     stockNumber: "TR003",
-    status: "available", 
+    status: "available",
+    statusBanner: null, 
     description: "Powerful and capable pickup truck with 4WD. Perfect for work and recreation with excellent towing capacity.",
     features: ["4WD", "Tow Package", "Bed Liner", "Navigation", "SYNC 3"],
     images: [
@@ -102,17 +108,17 @@ export const getStaticVehicles = async (filters?: any) => {
       filtered = filtered.filter(v => v.year <= parseInt(filters.yearMax));
     }
     if (filters.priceMin) {
-      filtered = filtered.filter(v => v.price >= parseInt(filters.priceMin));
+      filtered = filtered.filter(v => parseInt(v.price) >= parseInt(filters.priceMin));
     }
     if (filters.priceMax) {
-      filtered = filtered.filter(v => v.price <= parseInt(filters.priceMax));
+      filtered = filtered.filter(v => parseInt(v.price) <= parseInt(filters.priceMax));
     }
     if (filters.searchQuery) {
       const query = filters.searchQuery.toLowerCase();
       filtered = filtered.filter(v => 
         v.make.toLowerCase().includes(query) ||
         v.model.toLowerCase().includes(query) ||
-        v.description.toLowerCase().includes(query)
+        (v.description && v.description.toLowerCase().includes(query))
       );
     }
   }

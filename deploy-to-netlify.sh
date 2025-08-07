@@ -13,11 +13,11 @@ echo "📦 Installing dependencies..."
 npm install
 
 echo "🏗️  Building for production..."
-vite build --outDir client/dist
+npm run build
 
-# Check if build was successful
-if [ ! -d "client/dist" ]; then
-    echo "❌ Error: Build failed. client/dist directory not found."
+# Check if build was successful  
+if [ ! -d "dist/public" ]; then
+    echo "❌ Error: Build failed. dist/public directory not found."
     exit 1
 fi
 
@@ -27,15 +27,15 @@ echo "📋 Next steps for Netlify deployment:"
 echo ""
 echo "Option 1 - Drag & Drop:"
 echo "  1. Go to https://netlify.com"
-echo "  2. Drag and drop the 'client/dist' folder to deploy"
+echo "  2. Drag and drop the 'dist/public' folder to deploy"
 echo ""
 echo "Option 2 - Git Integration:"
 echo "  1. Push your code to GitHub/GitLab/Bitbucket"
 echo "  2. Connect repository to Netlify"
 echo "  3. Use these build settings:"
-echo "     - Build command: vite build --outDir client/dist"
-echo "     - Publish directory: client/dist"
+echo "     - Build command: npm run build"
+echo "     - Publish directory: dist/public"
 echo "     - Node version: 18"
 echo ""
-echo "🔍 Build output location: $(pwd)/client/dist"
+echo "🔍 Build output location: $(pwd)/dist/public"
 echo "🌐 Your T-Rex Motors site is ready for deployment!"
