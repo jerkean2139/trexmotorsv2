@@ -1,7 +1,7 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { insertVehicleSchema, insertInquirySchema } from "@shared/schema";
+import { insertVehicleSchema, insertInquirySchema, insertFinancingApplicationSchema } from "@shared/schema";
 import { ObjectStorageService, ObjectNotFoundError } from "./objectStorage";
 import bcrypt from "bcrypt";
 import session from "express-session";
@@ -263,6 +263,31 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.json(inquiries);
     } catch (error) {
       console.error("Error fetching inquiries:", error);
+      res.status(500).json({ error: "Internal server error" });
+    }
+  });
+
+  // Financing application routes
+  app.post("/api/financing-applications", async (req, res) => {
+    try {
+      const applicationData = insertFinancingApplicationSchema.parse(req.body);
+      const application = await storage.createFinancingApplication(applicationData);
+      res.status(201).json(application);
+    } catch (error) {
+      console.error("Error creating financing application:", error);
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ error: error.errors });
+      }
+      res.status(500).json({ error: "Internal server error" });
+    }
+  });
+
+  app.get("/api/financing-applications", requireAuth, async (req, res) => {
+    try {
+      const applications = await storage.getFinancingApplications();
+      res.json(applications);
+    } catch (error) {
+      console.error("Error fetching financing applications:", error);
       res.status(500).json({ error: "Internal server error" });
     }
   });

@@ -1,4 +1,4 @@
-import { vehicles, inquiries, users, type User, type InsertUser, type Vehicle, type InsertVehicle, type Inquiry, type InsertInquiry } from "@shared/schema";
+import { vehicles, inquiries, users, financingApplications, type User, type InsertUser, type Vehicle, type InsertVehicle, type Inquiry, type InsertInquiry, type FinancingApplication, type InsertFinancingApplication } from "@shared/schema";
 import { db } from "./db";
 import { eq, like, and, or, gte, lte, desc, asc, sql } from "drizzle-orm";
 
@@ -31,6 +31,9 @@ export interface IStorage {
   
   createInquiry(inquiry: InsertInquiry): Promise<Inquiry>;
   getInquiries(): Promise<Inquiry[]>;
+  
+  createFinancingApplication(application: InsertFinancingApplication): Promise<FinancingApplication>;
+  getFinancingApplications(): Promise<FinancingApplication[]>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -221,6 +224,21 @@ export class DatabaseStorage implements IStorage {
       .select()
       .from(inquiries)
       .orderBy(desc(inquiries.createdAt));
+  }
+
+  async createFinancingApplication(application: InsertFinancingApplication): Promise<FinancingApplication> {
+    const [newApplication] = await db
+      .insert(financingApplications)
+      .values(application)
+      .returning();
+    return newApplication;
+  }
+
+  async getFinancingApplications(): Promise<FinancingApplication[]> {
+    return await db
+      .select()
+      .from(financingApplications)
+      .orderBy(desc(financingApplications.createdAt));
   }
 }
 

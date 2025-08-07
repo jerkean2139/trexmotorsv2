@@ -48,6 +48,25 @@ export const inquiries = pgTable("inquiries", {
   createdAt: timestamp("created_at").defaultNow(),
 });
 
+export const financingApplications = pgTable("financing_applications", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  firstName: varchar("first_name", { length: 50 }).notNull(),
+  lastName: varchar("last_name", { length: 50 }).notNull(),
+  email: varchar("email", { length: 100 }).notNull(),
+  phone: varchar("phone", { length: 20 }).notNull(),
+  address: varchar("address", { length: 200 }).notNull(),
+  city: varchar("city", { length: 50 }).notNull(),
+  state: varchar("state", { length: 20 }).notNull(),
+  zipCode: varchar("zip_code", { length: 10 }).notNull(),
+  employmentStatus: varchar("employment_status", { length: 50 }).notNull(),
+  monthlyIncome: varchar("monthly_income", { length: 50 }).notNull(),
+  creditScore: varchar("credit_score", { length: 50 }),
+  downPayment: varchar("down_payment", { length: 50 }),
+  vehicleInterest: text("vehicle_interest"),
+  additionalInfo: text("additional_info"),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
 export const insertUserSchema = createInsertSchema(users).pick({
   username: true,
   password: true,
@@ -64,9 +83,16 @@ export const insertInquirySchema = createInsertSchema(inquiries).omit({
   createdAt: true,
 });
 
+export const insertFinancingApplicationSchema = createInsertSchema(financingApplications).omit({
+  id: true,
+  createdAt: true,
+});
+
 export type InsertUser = z.infer<typeof insertUserSchema>;
 export type User = typeof users.$inferSelect;
 export type InsertVehicle = z.infer<typeof insertVehicleSchema>;
 export type Vehicle = typeof vehicles.$inferSelect;
 export type InsertInquiry = z.infer<typeof insertInquirySchema>;
 export type Inquiry = typeof inquiries.$inferSelect;
+export type InsertFinancingApplication = z.infer<typeof insertFinancingApplicationSchema>;
+export type FinancingApplication = typeof financingApplications.$inferSelect;
