@@ -349,10 +349,9 @@ export default function AdminVehicleForm({ vehicle, onSuccess, onCancel }: Admin
                       const reader = new FileReader();
                       reader.onload = (event) => {
                         const dataUrl = event.target?.result as string;
-                        setFormData(prev => ({
-                          ...prev,
-                          images: [...(prev.images as string[] || []), dataUrl].slice(0, 10)
-                        }));
+                        const currentImages = (formData.images as string[]) || [];
+                        const newImages = [...currentImages, dataUrl].slice(0, 10);
+                        handleChange('images', newImages);
                       };
                       reader.readAsDataURL(file);
                     }
@@ -372,7 +371,7 @@ export default function AdminVehicleForm({ vehicle, onSuccess, onCancel }: Admin
           <div>
             <Label className="text-sm text-gray-600">Or paste Google Drive URLs (one per line)</Label>
             <textarea
-              className="w-full h-32 p-3 border rounded text-sm font-mono"
+              className="w-full h-32 p-3 border rounded text-sm font-mono resize-none"
               placeholder={`Paste your Google Drive image URLs here, one per line (up to 10):
 
 https://drive.google.com/file/d/FILE_ID_1/view
@@ -380,7 +379,7 @@ https://drive.google.com/file/d/FILE_ID_2/view
 https://drive.google.com/uc?export=view&id=FILE_ID_3
 
 Or any other direct image URLs...`}
-              value={formData.images?.join('\n') || ''}
+              value={(formData.images as string[] || []).join('\n') || ''}
               onChange={(e) => {
                 // Process URLs and convert Google Drive sharing links to direct image URLs
                 const rawUrls = e.target.value.split('\n')
@@ -426,7 +425,7 @@ Or any other direct image URLs...`}
                 }).slice(0, 10); // Limit to 10 images
                 
                 console.log('Processed URLs:', processedUrls);
-                setFormData({ ...formData, images: processedUrls });
+                handleChange('images', processedUrls);
               }}
             />
             <div className="text-xs text-gray-500 mt-2 space-y-1">
@@ -455,7 +454,7 @@ Or any other direct image URLs...`}
                   type="button"
                   variant="outline"
                   size="sm"
-                  onClick={() => setFormData({ ...formData, images: [] })}
+                  onClick={() => handleChange('images', [])}
                   className="text-xs"
                 >
                   Clear All Images
@@ -491,7 +490,7 @@ Or any other direct image URLs...`}
                         className="absolute top-1 left-1 opacity-0 group-hover:opacity-100 transition-opacity w-6 h-6 p-0"
                         onClick={() => {
                           const updatedImages = (formData.images as string[])?.filter((_, i) => i !== index) || [];
-                          setFormData({ ...formData, images: updatedImages });
+                          handleChange('images', updatedImages);
                         }}
                         title="Remove image"
                       >
