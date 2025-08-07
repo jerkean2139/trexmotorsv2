@@ -1,0 +1,63 @@
+# Overview
+
+This is a used car dealership website for T-Rex Motors in Richmond. The application provides a customer-facing vehicle inventory browsing system with search and filter capabilities, along with an admin dashboard for vehicle management. The system is built as a full-stack web application using modern React and Node.js technologies with a PostgreSQL database.
+
+# User Preferences
+
+Preferred communication style: Simple, everyday language.
+
+# System Architecture
+
+## Frontend Architecture
+- **Framework**: React 18 with TypeScript for type safety and modern component patterns
+- **Styling**: Tailwind CSS with shadcn/ui component library for consistent, professional automotive branding
+- **Routing**: Wouter for lightweight client-side routing
+- **State Management**: TanStack React Query for server state management and caching
+- **Build Tool**: Vite for fast development and optimized production builds
+
+## Backend Architecture
+- **Runtime**: Node.js with Express.js for the REST API server
+- **Language**: TypeScript throughout the entire stack for consistency
+- **Database ORM**: Drizzle ORM with PostgreSQL for type-safe database operations
+- **Authentication**: Session-based authentication for admin users
+- **File Uploads**: Uppy.js integration with object storage for vehicle images
+
+## Database Design
+- **Primary Entities**: Users, Vehicles, and Inquiries
+- **Vehicle Schema**: Comprehensive fields including make, model, year, price, mileage, colors, engine specs, features array, and image storage
+- **Relationships**: Inquiries reference specific vehicles for customer interest tracking
+- **Features**: Support for featured vehicles, status tracking, and rich metadata
+
+## Project Structure
+- `/client` - React frontend application with components, pages, and utilities
+- `/server` - Express backend with API routes, database logic, and authentication
+- `/shared` - Common TypeScript schemas and types used by both frontend and backend
+- Single Vite configuration at project root for unified build process
+
+## Development vs Production Strategy
+- Development uses Vite dev server with hot module replacement
+- Production serves static files from Express with proper MIME types
+- Environment-based configuration for database connections and authentication
+
+# External Dependencies
+
+## Database
+- **Neon Database**: Serverless PostgreSQL database with connection pooling
+- **Drizzle Kit**: Database migration and schema management tools
+
+## UI Components
+- **Radix UI**: Headless component primitives for accessibility and keyboard navigation
+- **shadcn/ui**: Pre-styled component library built on Radix UI with Tailwind CSS
+
+## File Storage
+- **Google Cloud Storage**: Object storage for vehicle images with ACL policy management
+- **Uppy.js**: File upload interface with AWS S3 integration for direct uploads
+
+## Authentication & Security
+- **bcrypt**: Password hashing for admin authentication
+- **express-session**: Session management for maintaining admin login state
+
+## Development Tools
+- **Replit Integration**: Development environment optimization with cartographer and error modal plugins
+- **TypeScript**: Full-stack type safety with shared schema definitions
+- **ESLint/Prettier**: Code quality and formatting (implied by modern React setup)
