@@ -129,7 +129,32 @@ export default function VehicleDetail({ vehicle, onClose }: VehicleDetailProps) 
                 <div className="text-right">
                   <p className="text-sm text-gray-500">Stock #</p>
                   <p className="font-medium">{vehicle.stockNumber || 'N/A'}</p>
+                  {vehicle.vin && (
+                    <>
+                      <p className="text-sm text-gray-500 mt-2">VIN</p>
+                      <p className="font-mono text-xs">{vehicle.vin}</p>
+                    </>
+                  )}
                 </div>
+              </div>
+
+              {/* Call to Action Buttons */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+                <Button 
+                  className="bg-trex-green hover:bg-trex-green/90 text-white text-lg py-3"
+                  onClick={() => handleFormChange('interestType', 'Apply for Financing')}
+                >
+                  <i className="fas fa-calculator mr-2"></i>
+                  Apply for Financing
+                </Button>
+                <Button 
+                  variant="outline" 
+                  className="border-trex-green text-trex-green hover:bg-trex-green hover:text-white text-lg py-3"
+                  onClick={() => handleFormChange('interestType', 'Schedule Test Drive')}
+                >
+                  <i className="fas fa-key mr-2"></i>
+                  Schedule Test Drive
+                </Button>
               </div>
 
               <div className="space-y-4 mb-8">
@@ -266,6 +291,7 @@ export default function VehicleDetail({ vehicle, onClose }: VehicleDetailProps) 
                         <SelectItem value="Schedule Test Drive">Schedule Test Drive</SelectItem>
                         <SelectItem value="Get More Information">Get More Information</SelectItem>
                         <SelectItem value="Check Financing Options">Check Financing Options</SelectItem>
+                        <SelectItem value="Apply for Financing">Apply for Financing</SelectItem>
                         <SelectItem value="Trade-in Evaluation">Trade-in Evaluation</SelectItem>
                       </SelectContent>
                     </Select>

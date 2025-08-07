@@ -28,6 +28,7 @@ export const vehicles = pgTable("vehicles", {
   features: jsonb("features").$type<string[]>(),
   images: jsonb("images").$type<string[]>(),
   status: varchar("status", { length: 20 }).notNull().default("available"),
+  statusBanner: varchar("status_banner", { length: 20 }),
   stockNumber: varchar("stock_number", { length: 20 }).unique(),
   vin: varchar("vin", { length: 17 }).unique(),
   isFeatured: boolean("is_featured").default(false),

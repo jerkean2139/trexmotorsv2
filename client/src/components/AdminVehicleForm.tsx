@@ -37,12 +37,14 @@ export default function AdminVehicleForm({ vehicle, onSuccess, onCancel }: Admin
     features: vehicle?.features || [],
     images: vehicle?.images || [],
     status: vehicle?.status || 'available',
+    statusBanner: vehicle?.statusBanner || null,
     stockNumber: vehicle?.stockNumber || '',
     vin: vehicle?.vin || '',
     isFeatured: vehicle?.isFeatured || false,
   });
 
   const [newFeature, setNewFeature] = useState('');
+  const [newImageUrl, setNewImageUrl] = useState('');
   const queryClient = useQueryClient();
   const { toast } = useToast();
 
@@ -114,6 +116,18 @@ export default function AdminVehicleForm({ vehicle, onSuccess, onCancel }: Admin
       title: "Success",
       description: `${uploadedUrls.length} image(s) uploaded successfully`
     });
+  };
+
+  const handleAddImageUrl = () => {
+    if (newImageUrl.trim()) {
+      const images = [...(formData.images || []), newImageUrl.trim()];
+      setFormData({ ...formData, images });
+      setNewImageUrl('');
+      toast({
+        title: "Success",
+        description: "Image URL added successfully"
+      });
+    }
   };
 
   const handleRemoveImage = (index: number) => {
@@ -269,12 +283,15 @@ export default function AdminVehicleForm({ vehicle, onSuccess, onCancel }: Admin
             onChange={(e) => handleChange('stockNumber', e.target.value)}
           />
         </div>
-        <div>
-          <Label htmlFor="vin">VIN</Label>
+        <div className="md:col-span-2">
+          <Label htmlFor="vin" className="text-lg font-semibold text-trex-green">VIN Number</Label>
           <Input
             id="vin"
             value={formData.vin || ''}
             onChange={(e) => handleChange('vin', e.target.value)}
+            placeholder="Enter 17-character VIN"
+            className="font-mono text-lg border-2 border-trex-green/30 focus:border-trex-green"
+            maxLength={17}
           />
         </div>
         <div>
@@ -287,6 +304,23 @@ export default function AdminVehicleForm({ vehicle, onSuccess, onCancel }: Admin
               <SelectItem value="available">Available</SelectItem>
               <SelectItem value="pending">Pending</SelectItem>
               <SelectItem value="sold">Sold</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+        <div>
+          <Label htmlFor="statusBanner">Status Banner (Optional)</Label>
+          <Select value={formData.statusBanner || ""} onValueChange={(value) => handleChange('statusBanner', value === "" ? null : value)}>
+            <SelectTrigger>
+              <SelectValue placeholder="Select status banner" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="">No Banner</SelectItem>
+              <SelectItem value="new">New</SelectItem>
+              <SelectItem value="low-miles">Low Miles</SelectItem>
+              <SelectItem value="local-trade">Local Trade In</SelectItem>
+              <SelectItem value="just-reduced">Just Reduced</SelectItem>
+              <SelectItem value="sold">Sold</SelectItem>
+              <SelectItem value="pending">Pending</SelectItem>
             </SelectContent>
           </Select>
         </div>
@@ -336,42 +370,72 @@ export default function AdminVehicleForm({ vehicle, onSuccess, onCancel }: Admin
         </div>
       </div>
 
-      {/* Image Upload */}
+      {/* Image Management */}
       <div>
-        <Label>Vehicle Images</Label>
+        <Label className="text-lg font-semibold">Vehicle Images</Label>
         <div className="space-y-4">
-          <ObjectUploader
-            maxNumberOfFiles={10}
-            onGetUploadParameters={handleGetUploadParameters}
-            onComplete={handleUploadComplete}
-            buttonClassName="w-full"
-          >
-            <div className="flex items-center justify-center">
-              <i className="fas fa-cloud-upload-alt mr-2"></i>
-              Upload Images
+          {/* Upload Images */}
+          <div>
+            <Label className="text-sm text-gray-600">Upload Image Files</Label>
+            <ObjectUploader
+              maxNumberOfFiles={10}
+              onGetUploadParameters={handleGetUploadParameters}
+              onComplete={handleUploadComplete}
+              buttonClassName="w-full"
+            >
+              <div className="flex items-center justify-center">
+                <i className="fas fa-cloud-upload-alt mr-2"></i>
+                Upload Images
+              </div>
+            </ObjectUploader>
+          </div>
+
+          {/* Add Google Drive Image URL */}
+          <div>
+            <Label className="text-sm text-gray-600">Add Google Drive Image URL</Label>
+            <div className="flex gap-2">
+              <Input
+                value={newImageUrl}
+                onChange={(e) => setNewImageUrl(e.target.value)}
+                placeholder="Paste Google Drive image link here..."
+                className="flex-1"
+              />
+              <Button type="button" onClick={handleAddImageUrl} variant="outline">
+                <i className="fas fa-plus mr-2"></i>Add Image
+              </Button>
             </div>
-          </ObjectUploader>
+            <p className="text-xs text-gray-500 mt-1">
+              Tip: Right-click on Google Drive image → "Copy image address"
+            </p>
+          </div>
           
+          {/* Current Images */}
           {formData.images && formData.images.length > 0 && (
-            <div className="grid grid-cols-4 gap-2">
-              {formData.images.map((image, index) => (
-                <div key={index} className="relative">
-                  <img
-                    src={image}
-                    alt={`Vehicle image ${index + 1}`}
-                    className="w-full h-24 object-cover rounded"
-                  />
-                  <Button
-                    type="button"
-                    variant="destructive"
-                    size="sm"
-                    className="absolute top-1 right-1"
-                    onClick={() => handleRemoveImage(index)}
-                  >
-                    <i className="fas fa-times"></i>
-                  </Button>
-                </div>
-              ))}
+            <div>
+              <Label className="text-sm text-gray-600">Current Images ({formData.images.length})</Label>
+              <div className="grid grid-cols-3 md:grid-cols-4 gap-3 mt-2">
+                {formData.images.map((image, index) => (
+                  <div key={index} className="relative group">
+                    <img
+                      src={image}
+                      alt={`Vehicle image ${index + 1}`}
+                      className="w-full h-24 object-cover rounded border-2 border-gray-200 group-hover:border-trex-green"
+                    />
+                    <Button
+                      type="button"
+                      variant="destructive"
+                      size="sm"
+                      className="absolute top-1 right-1 opacity-0 group-hover:opacity-100 transition-opacity"
+                      onClick={() => handleRemoveImage(index)}
+                    >
+                      <i className="fas fa-times text-xs"></i>
+                    </Button>
+                    <div className="absolute bottom-1 left-1 bg-black bg-opacity-50 text-white text-xs px-1 rounded">
+                      {index + 1}
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
           )}
         </div>
