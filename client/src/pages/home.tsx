@@ -26,7 +26,7 @@ export default function Home() {
     queryKey: ["/api/vehicles", filters],
     queryFn: async ({ queryKey }) => {
       // For static deployment, always use embedded data
-      if (typeof window !== 'undefined' && !window.location.href.includes('localhost') && !window.location.href.includes('replit')) {
+      if (typeof window !== 'undefined' && !window.location.href.includes('localhost') && !window.location.href.includes('replit.dev') && !window.location.href.includes('127.0.0.1')) {
         console.log("Static deployment detected, using embedded vehicle data");
         return getVehicles(queryKey[1]);
       }
@@ -56,7 +56,7 @@ export default function Home() {
     queryKey: ["/api/vehicles/featured"],
     queryFn: async () => {
       // For static deployment, always use embedded data
-      if (typeof window !== 'undefined' && !window.location.href.includes('localhost') && !window.location.href.includes('replit')) {
+      if (typeof window !== 'undefined' && !window.location.href.includes('localhost') && !window.location.href.includes('replit.dev') && !window.location.href.includes('127.0.0.1')) {
         console.log("Static deployment detected, using embedded featured vehicle data");
         return getFeaturedVehicles();
       }

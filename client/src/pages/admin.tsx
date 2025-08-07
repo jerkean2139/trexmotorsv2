@@ -29,6 +29,11 @@ export default function Admin() {
   const { data: authData, refetch: refetchAuth } = useQuery({
     queryKey: ["/api/auth/check"],
     queryFn: async () => {
+      // Skip auth check for static deployments
+      if (typeof window !== 'undefined' && !window.location.href.includes('localhost') && !window.location.href.includes('replit.dev') && !window.location.href.includes('127.0.0.1')) {
+        return { isAuthenticated: false };
+      }
+      
       const response = await fetch("/api/auth/check", { credentials: 'include' });
       if (!response.ok) {
         return { isAuthenticated: false };
@@ -50,6 +55,11 @@ export default function Admin() {
   // Login mutation
   const loginMutation = useMutation({
     mutationFn: async (credentials: { username: string; password: string }) => {
+      // Skip login for static deployments
+      if (typeof window !== 'undefined' && !window.location.href.includes('localhost') && !window.location.href.includes('replit.dev') && !window.location.href.includes('127.0.0.1')) {
+        throw new Error('Admin login not available in static deployment');
+      }
+      
       const response = await fetch("/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
