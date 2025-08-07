@@ -94,13 +94,13 @@ function FinancingPage() {
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
       <header className="bg-white shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <div className="flex items-center justify-between">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between h-[250px]">
             <Link href="/">
               <img 
                 src="https://storage.googleapis.com/msgsndr/QjiQRR74D1pxPF7I8fcC/media/68042afc29d629c59c352a2b.png" 
                 alt="T-Rex Motors Logo" 
-                className="w-[120px] sm:w-[140px] md:w-[160px] h-auto cursor-pointer"
+                className="w-[250px] h-[250px] object-contain cursor-pointer"
               />
             </Link>
             <Link href="/">

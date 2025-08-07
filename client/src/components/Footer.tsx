@@ -8,7 +8,7 @@ export default function Footer() {
               <img 
                 src="https://storage.googleapis.com/msgsndr/QjiQRR74D1pxPF7I8fcC/media/68042afc29d629c59c352a2b.png" 
                 alt="T-Rex Motors Logo" 
-                className="w-[140px] sm:w-[160px] h-auto"
+                className="w-[250px] h-[250px] object-contain"
               />
             </div>
             <p className="text-gray-400 mb-4">
