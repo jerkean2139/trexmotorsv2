@@ -85,7 +85,7 @@ export default function AdminVehicleForm({ vehicle, onSuccess, onCancel }: Admin
   };
 
   const handleRemoveFeature = (index: number) => {
-    const updatedFeatures = formData.features?.filter((_, i) => i !== index) || [];
+    const updatedFeatures = (formData.features as string[])?.filter((_, i) => i !== index) || [];
     setFormData({ ...formData, features: updatedFeatures });
   };
 
@@ -351,23 +351,58 @@ Or any other direct image URLs...`}
                 
                 // Convert Google Drive sharing links to direct image URLs
                 const processedUrls = rawUrls.map(url => {
-                  // Handle Google Drive sharing links like: https://drive.google.com/file/d/FILE_ID/view
-                  const driveMatch = url.match(/\/file\/d\/([a-zA-Z0-9-_]+)/);
-                  if (driveMatch) {
-                    return `https://drive.google.com/uc?export=view&id=${driveMatch[1]}`;
+                  // Handle multiple Google Drive URL formats:
+                  // 1. https://drive.google.com/file/d/FILE_ID/view
+                  // 2. https://drive.google.com/file/d/FILE_ID/view?usp=sharing
+                  // 3. https://drive.google.com/open?id=FILE_ID
+                  // 4. Already converted: https://drive.google.com/uc?export=view&id=FILE_ID
+                  
+                  let driveFileId = null;
+                  
+                  // Method 1: /file/d/FILE_ID pattern
+                  const fileMatch = url.match(/\/file\/d\/([a-zA-Z0-9-_]+)/);
+                  if (fileMatch) {
+                    driveFileId = fileMatch[1];
                   }
+                  
+                  // Method 2: open?id=FILE_ID pattern  
+                  const openMatch = url.match(/[?&]id=([a-zA-Z0-9-_]+)/);
+                  if (openMatch && !driveFileId) {
+                    driveFileId = openMatch[1];
+                  }
+                  
+                  // Method 3: uc?export=view&id=FILE_ID (already converted)
+                  const ucMatch = url.match(/uc\?export=view&id=([a-zA-Z0-9-_]+)/);
+                  if (ucMatch) {
+                    return url; // Already in correct format
+                  }
+                  
+                  // Convert to direct image URL if we found a file ID
+                  if (driveFileId) {
+                    console.log('Converting Google Drive URL:', url, 'to ID:', driveFileId);
+                    return `https://drive.google.com/uc?export=view&id=${driveFileId}`;
+                  }
+                  
+                  // Return as-is if not a Google Drive URL
                   return url;
                 }).slice(0, 10); // Limit to 10 images
                 
+                console.log('Processed URLs:', processedUrls);
                 setFormData({ ...formData, images: processedUrls });
               }}
             />
-            <p className="text-xs text-gray-500 mt-2">
-              <strong>Google Drive Setup:</strong> Right-click image → Share → "Anyone with the link" → Copy link. 
-              Paste sharing links (they'll be converted automatically) or direct image URLs. Maximum 10 images per vehicle.
-              <br />
-              <strong>Supported formats:</strong> drive.google.com/file/d/FILE_ID/view or any direct image URL
-            </p>
+            <div className="text-xs text-gray-500 mt-2 space-y-1">
+              <p>
+                <strong>Google Drive Setup:</strong> Right-click image → Share → "Anyone with the link" → Copy link. 
+                Paste sharing links (they'll be converted automatically) or direct image URLs. Maximum 10 images per vehicle.
+              </p>
+              <p className="text-xs text-blue-600">
+                <strong>Pro tip:</strong> For better image loading, use: https://drive.google.com/uc?export=view&id=YOUR_FILE_ID
+              </p>
+              <p>
+                <strong>Supported formats:</strong> drive.google.com/file/d/FILE_ID/view, drive.google.com/open?id=FILE_ID, or direct image URLs
+              </p>
+            </div>
           </div>
           
           {/* Image Preview */}
@@ -379,7 +414,8 @@ Or any other direct image URLs...`}
               </Label>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mt-2">
                 {formData.images.map((image, index) => {
-                  const imageUrl = image as string; // URLs are already processed in onChange
+                  const imageUrl = image as string;
+                  console.log(`Rendering image ${index + 1}:`, imageUrl);
                   
                   return (
                     <div key={index} className="relative group">
@@ -387,12 +423,17 @@ Or any other direct image URLs...`}
                         src={imageUrl}
                         alt={`Vehicle image ${index + 1}`}
                         className="w-full h-24 object-cover rounded border-2 border-gray-200 group-hover:border-trex-green transition-colors"
+                        onLoad={() => console.log(`Image ${index + 1} loaded successfully:`, imageUrl)}
                         onError={(e) => {
+                          console.error(`Image ${index + 1} failed to load:`, imageUrl);
                           (e.target as HTMLImageElement).src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjI0IiBoZWlnaHQ9IjI0IiBmaWxsPSIjZjNmNGY2Ii8+CjxwYXRoIGQ9Im0xNSAxMi0zLTMtMy4wMDEgM20xLjUtMi41YTEuNSAxLjUgMCAxIDEgMC0zIDEuNSAxLjUgMCAwIDEgMCAzem0tNi0yaDEwdjhoLTEweiIgc3Ryb2tlPSIjOWNhM2FmIiBzdHJva2Utd2lkdGg9IjEuNSIgZmlsbD0ibm9uZSIvPgo8L3N2Zz4K';
                         }}
                       />
                       <div className="absolute top-1 right-1 bg-black bg-opacity-70 text-white text-xs px-1 rounded">
                         {index + 1}
+                      </div>
+                      <div className="absolute bottom-0 left-0 right-0 bg-black bg-opacity-50 text-white text-xs p-1 truncate opacity-0 group-hover:opacity-100 transition-opacity">
+                        {imageUrl.length > 30 ? `${imageUrl.substring(0, 30)}...` : imageUrl}
                       </div>
                       <Button
                         type="button"
@@ -400,7 +441,7 @@ Or any other direct image URLs...`}
                         size="sm"
                         className="absolute top-1 left-1 opacity-0 group-hover:opacity-100 transition-opacity w-6 h-6 p-0"
                         onClick={() => {
-                          const updatedImages = formData.images?.filter((_, i) => i !== index) || [];
+                          const updatedImages = (formData.images as string[])?.filter((_, i) => i !== index) || [];
                           setFormData({ ...formData, images: updatedImages });
                         }}
                         title="Remove image"
