@@ -1,0 +1,86 @@
+~/workspace/admin-backend$ git merge dev
+Updating 652401d..a48c911
+Fast-forward
+ .nvmrc                                                                                     |   1 +
+ .replit                                                                                    |   3 +
+ DEPLOY_TO_NETLIFY_GUIDE.md                                                                 | 130 ++++++++
+ FINAL_NETLIFY_INSTRUCTIONS.md                                                              |  80 +++++
+ FIXED_DEPLOYMENT_SOLUTION.md                                                               |  88 ++++++
+ NETLIFY_DEPLOYMENT.md                                                                      |  68 ++++
+ NETLIFY_TROUBLESHOOTING.md                                                                 | 119 +++++++
+ README.netlify.md                                                                          |  91 ++++++
+ admin-backend/.vercelignore                                                                |   4 +
+ admin-backend/PRODUCTION_SETUP.md                                                          |  52 ++++
+ admin-backend/README.md                                                                    |  57 ++++
+ admin-backend/VERCEL_DEPLOYMENT.md                                                         |  55 ++++
+ admin-backend/admin-deployment-guide.md                                                    |  68 ++++
+ admin-backend/drizzle.config.ts                                                            |   9 +
+ admin-backend/migrate-to-production.js                                                     | 105 +++++++
+ admin-backend/package.json                                                                 |  33 ++
+ admin-backend/schema.ts                                                                    |  73 +++++
+ admin-backend/server.ts                                                                    | 179 +++++++++++
+ admin-backend/tsconfig.json                                                                |  23 ++
+ admin-backend/vercel.json                                                                  |  18 ++
+ ...t-express-version-1-0-0-type-module-license-MIT-scripts-1754551192223_1754551192224.txt | 116 +++++++
+ client/index.html                                                                          |   1 +
+ client/src/App.tsx                                                                         |   6 +
+ client/src/components/Footer.tsx                                                           |  43 ++-
+ client/src/components/Header.tsx                                                           |  75 +++--
+ client/src/lib/exportedVehicles.ts                                                         | 739 ++++++++++++++++++++++++++++++++++++++++++++
+ client/src/lib/realVehicleData.ts                                                          | 197 ++++++++++++
+ client/src/lib/staticData.ts                                                               | 136 ++++++++
+ client/src/pages/admin.tsx                                                                 |  63 +++-
+ client/src/pages/financing.tsx                                                             | 356 +++++++++++++++++++++
+ client/src/pages/home.tsx                                                                  | 191 +++++++++++-
+ client/src/pages/privacy-policy.tsx                                                        |  76 +++++
+ client/src/pages/terms-of-service.tsx                                                      |  84 +++++
+ deploy-to-netlify.sh                                                                       |  41 +++
+ deployment-checklist.txt                                                                   |  60 ++++
+ netlify.toml                                                                               |  13 +
+ package-lock.json                                                                          | 198 ++++++++++++
+ package.json                                                                               |   3 +
+ replit.md                                                                                  |   6 +
+ server/routes.ts                                                                           |   6 +-
+ test-netlify-deployment.html                                                               |  37 +++
+ vite.config.netlify.ts                                                                     |  36 +++
+ 42 files changed, 3671 insertions(+), 68 deletions(-)
+ create mode 100644 .nvmrc
+ create mode 100644 DEPLOY_TO_NETLIFY_GUIDE.md
+ create mode 100644 FINAL_NETLIFY_INSTRUCTIONS.md
+ create mode 100644 FIXED_DEPLOYMENT_SOLUTION.md
+ create mode 100644 NETLIFY_DEPLOYMENT.md
+ create mode 100644 NETLIFY_TROUBLESHOOTING.md
+ create mode 100644 README.netlify.md
+ create mode 100644 admin-backend/.vercelignore
+ create mode 100644 admin-backend/PRODUCTION_SETUP.md
+ create mode 100644 admin-backend/README.md
+ create mode 100644 admin-backend/VERCEL_DEPLOYMENT.md
+ create mode 100644 admin-backend/admin-deployment-guide.md
+ create mode 100644 admin-backend/drizzle.config.ts
+ create mode 100644 admin-backend/migrate-to-production.js
+ create mode 100644 admin-backend/package.json
+ create mode 100644 admin-backend/schema.ts
+ create mode 100644 admin-backend/server.ts
+ create mode 100644 admin-backend/tsconfig.json
+ create mode 100644 admin-backend/vercel.json
+ create mode 100644 attached_assets/Pasted--name-rest-express-version-1-0-0-type-module-license-MIT-scripts-1754551192223_1754551192224.txt
+ create mode 100644 client/src/lib/exportedVehicles.ts
+ create mode 100644 client/src/lib/realVehicleData.ts
+ create mode 100644 client/src/lib/staticData.ts
+ create mode 100644 client/src/pages/financing.tsx
+ create mode 100644 client/src/pages/privacy-policy.tsx
+ create mode 100644 client/src/pages/terms-of-service.tsx
+ create mode 100644 deploy-to-netlify.sh
+ create mode 100644 deployment-checklist.txt
+ create mode 100644 netlify.toml
+ create mode 100644 test-netlify-deployment.html
+ create mode 100644 vite.config.netlify.ts
+~/workspace/admin-backend$ git push origin main
+Total 0 (delta 0), reused 0 (delta 0), pack-reused 0 (from 0)
+remote: 
+remote: Create a pull request for 'main' on GitHub by visiting:
+remote:      https://github.com/jerkean2139/trexmotorsv2/pull/new/main
+remote: 
+To https://github.com/jerkean2139/trexmotorsv2.git
+ * [new branch]      main -> main
+~/workspace/admin-backend$ 
