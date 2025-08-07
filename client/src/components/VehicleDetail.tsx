@@ -137,19 +137,19 @@ export default function VehicleDetail({ vehicle, onClose }: VehicleDetailProps) 
               {/* Call to Action Buttons */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
                 <Button 
-                  className="bg-trex-green hover:bg-trex-green/90 text-white text-lg py-3"
+                  className="bg-trex-green hover:bg-trex-green/90 text-white text-lg py-3 flex items-center justify-center"
                   onClick={() => handleFormChange('interestType', 'Apply for Financing')}
                 >
-                  <i className="fas fa-calculator mr-2"></i>
-                  Apply for Financing
+                  <i className="fas fa-calculator mr-2 flex-shrink-0"></i>
+                  <span>Apply for Financing</span>
                 </Button>
                 <Button 
                   variant="outline" 
-                  className="border-trex-green text-trex-green hover:bg-trex-green hover:text-white text-lg py-3"
+                  className="border-trex-green text-trex-green hover:bg-trex-green hover:text-white text-lg py-3 flex items-center justify-center"
                   onClick={() => handleFormChange('interestType', 'Schedule Test Drive')}
                 >
-                  <i className="fas fa-key mr-2"></i>
-                  Schedule Test Drive
+                  <i className="fas fa-key mr-2 flex-shrink-0"></i>
+                  <span>Schedule Test Drive</span>
                 </Button>
               </div>
 
@@ -305,7 +305,7 @@ export default function VehicleDetail({ vehicle, onClose }: VehicleDetailProps) 
                   </div>
                   <Button 
                     type="submit" 
-                    className="w-full bg-trex-green hover:bg-trex-green text-white font-medium"
+                    className="w-full bg-trex-green hover:bg-trex-green text-white font-medium flex items-center justify-center"
                     disabled={inquiryMutation.isPending}
                   >
                     {inquiryMutation.isPending ? "Sending..." : "Send Inquiry"}

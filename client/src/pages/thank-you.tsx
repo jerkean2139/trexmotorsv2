@@ -36,12 +36,12 @@ export default function ThankYou() {
               <div className="bg-gray-50 p-4 rounded-lg">
                 <Phone className="w-6 h-6 text-trex-green mx-auto mb-2" />
                 <h3 className="font-semibold text-gray-900">Call Us</h3>
-                <p className="text-gray-600">(804) 555-TREX</p>
+                <p className="text-gray-600">(765) 238-2887</p>
               </div>
               <div className="bg-gray-50 p-4 rounded-lg">
                 <Mail className="w-6 h-6 text-trex-green mx-auto mb-2" />
                 <h3 className="font-semibold text-gray-900">Email Us</h3>
-                <p className="text-gray-600">sales@trexmotors.com</p>
+                <p className="text-gray-600">info@trexmotors.com</p>
               </div>
             </div>
 
@@ -56,8 +56,8 @@ export default function ThankYou() {
               
               <div className="text-sm text-gray-500">
                 <p>Need immediate assistance?</p>
-                <p>Visit us at 1234 Main Street, Richmond, VA 23220</p>
-                <p>Monday - Saturday: 9 AM - 7 PM | Sunday: 12 PM - 5 PM</p>
+                <p>Visit us at 1300 South 9th St, Richmond, IN 47374</p>
+                <p>Mon-Sat: 9AM-7PM | Sunday: 12PM-5PM</p>
               </div>
             </div>
           </CardContent>
