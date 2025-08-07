@@ -12,20 +12,17 @@ export default function Footer() {
               />
             </div>
             <p className="text-gray-400 mb-4">
-              Richmond's premier used car dealership, serving customers with quality vehicles and exceptional service since 2010.
+              Your trusted partner for quality used cars in Richmond, IN since 2008
             </p>
             <div className="flex space-x-4">
               <a href="#" className="text-gray-400 hover:text-trex-green">
                 <i className="fab fa-facebook-f"></i>
               </a>
               <a href="#" className="text-gray-400 hover:text-trex-green">
-                <i className="fab fa-twitter"></i>
-              </a>
-              <a href="#" className="text-gray-400 hover:text-trex-green">
-                <i className="fab fa-instagram"></i>
-              </a>
-              <a href="#" className="text-gray-400 hover:text-trex-green">
                 <i className="fab fa-google"></i>
+              </a>
+              <a href="#" className="text-gray-400 hover:text-trex-green">
+                <i className="fab fa-yelp"></i>
               </a>
             </div>
           </div>
@@ -33,22 +30,20 @@ export default function Footer() {
           <div>
             <h4 className="text-lg font-semibold mb-4">Quick Links</h4>
             <ul className="space-y-2">
-              <li><a href="#inventory" className="text-gray-400 hover:text-trex-green">Browse Inventory</a></li>
-              <li><a href="#financing" className="text-gray-400 hover:text-trex-green">Financing Options</a></li>
-              <li><a href="#trade-in" className="text-gray-400 hover:text-trex-green">Trade-In Value</a></li>
-              <li><a href="#warranties" className="text-gray-400 hover:text-trex-green">Extended Warranties</a></li>
-              <li><a href="#service" className="text-gray-400 hover:text-trex-green">Service Center</a></li>
+              <li><a href="#inventory" className="text-gray-400 hover:text-trex-green">Inventory</a></li>
+              <li><a href="#financing" className="text-gray-400 hover:text-trex-green">Financing</a></li>
+              <li><a href="#about" className="text-gray-400 hover:text-trex-green">About Us</a></li>
+              <li><a href="#contact" className="text-gray-400 hover:text-trex-green">Contact</a></li>
             </ul>
           </div>
 
           <div>
-            <h4 className="text-lg font-semibold mb-4">Vehicle Types</h4>
+            <h4 className="text-lg font-semibold mb-4">Services</h4>
             <ul className="space-y-2">
-              <li><a href="#sedans" className="text-gray-400 hover:text-trex-green">Sedans</a></li>
-              <li><a href="#suvs" className="text-gray-400 hover:text-trex-green">SUVs & Crossovers</a></li>
-              <li><a href="#trucks" className="text-gray-400 hover:text-trex-green">Pickup Trucks</a></li>
-              <li><a href="#sports" className="text-gray-400 hover:text-trex-green">Sports Cars</a></li>
-              <li><a href="#luxury" className="text-gray-400 hover:text-trex-green">Luxury Vehicles</a></li>
+              <li><a href="#inspection" className="text-gray-400 hover:text-trex-green">Vehicle Inspection</a></li>
+              <li><a href="#trade-in" className="text-gray-400 hover:text-trex-green">Trade-In Appraisal</a></li>
+              <li><a href="#warranties" className="text-gray-400 hover:text-trex-green">Extended Warranties</a></li>
+              <li><a href="#service" className="text-gray-400 hover:text-trex-green">Service Center</a></li>
             </ul>
           </div>
 
@@ -57,11 +52,11 @@ export default function Footer() {
             <div className="space-y-2">
               <div className="flex items-start text-gray-400">
                 <i className="fas fa-map-marker-alt mr-2 text-trex-green mt-1"></i>
-                <span>1234 Main Street<br />Richmond, VA 23230</span>
+                <span>1300 South 9th St<br />Richmond, IN 47374</span>
               </div>
               <div className="flex items-center text-gray-400">
                 <i className="fas fa-phone mr-2 text-trex-green"></i>
-                <span>(804) 555-TREX</span>
+                <span>(765) 238-2887</span>
               </div>
               <div className="flex items-center text-gray-400">
                 <i className="fas fa-envelope mr-2 text-trex-green"></i>
@@ -76,7 +71,8 @@ export default function Footer() {
         </div>
 
         <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
-          <p>&copy; 2024 T-Rex Motors. All rights reserved. | Privacy Policy | Terms of Service</p>
+          <p>&copy; 2025 T-Rex Motors. All rights reserved. | <a href="/privacy-policy" className="hover:text-trex-green">Privacy Policy</a> | <a href="/terms-of-service" className="hover:text-trex-green">Terms of Service</a></p>
+          <p className="mt-2">Website designed and hosted by <a href="https://keanonbiz.com" target="_blank" rel="noopener noreferrer" className="hover:text-trex-green">keanonbiz.com</a></p>
         </div>
       </div>
     </footer>
