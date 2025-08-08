@@ -1,6 +1,6 @@
 {
   "name": "trex-admin-backend",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "type": "module",
   "scripts": {
     "dev": "NODE_ENV=development tsx server.ts",
@@ -22,6 +22,7 @@
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",
+    "@types/connect-pg-simple": "^7.0.0",
     "@types/cors": "^2.8.17",
     "@types/express": "^5.0.0",
     "@types/express-session": "^1.18.0",
