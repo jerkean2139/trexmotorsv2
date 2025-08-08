@@ -1,35 +1,40 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import { Pool } from '@neondatabase/serverless';
+import { Pool, neonConfig } from '@neondatabase/serverless';
 import { drizzle } from 'drizzle-orm/neon-serverless';
 import { eq, sql } from 'drizzle-orm';
 import { pgTable, varchar, integer, text, boolean, timestamp } from 'drizzle-orm/pg-core';
+import ws from 'ws';
 
-// Define the vehicles table directly
+// Configure WebSocket for Neon Database in serverless environment
+neonConfig.webSocketConstructor = ws;
+neonConfig.fetchConnectionCache = true;
+
+// Define the vehicles table directly - matching production schema
 const vehicles = pgTable("vehicles", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
-  stockNumber: varchar("stock_number").notNull(),
-  vin: varchar("vin").notNull(),
-  year: integer("year").notNull(),
   make: varchar("make").notNull(),
   model: varchar("model").notNull(),
-  mileage: integer("mileage").notNull(),
+  year: integer("year").notNull(),
+  trim: varchar("trim"),
   price: varchar("price").notNull(),
+  mileage: integer("mileage").notNull(),
   exteriorColor: varchar("exterior_color").notNull(),
   interiorColor: varchar("interior_color").notNull(),
-  transmission: varchar("transmission").notNull(),
-  engine: varchar("engine").notNull(),
-  drivetrain: varchar("drivetrain").notNull(),
   fuelType: varchar("fuel_type").notNull(),
-  bodyStyle: varchar("body_style").notNull(),
-  doors: integer("doors").notNull(),
-  seats: integer("seats").notNull(),
-  features: text("features").array().default([]),
-  images: text("images").array().default([]),
+  transmission: varchar("transmission").notNull(),
+  drivetrain: varchar("drivetrain").notNull(),
+  engine: varchar("engine").notNull(),
+  seatingCapacity: integer("seating_capacity"),
   description: text("description"),
+  features: varchar("features"),  // jsonb in production
+  images: varchar("images"),      // jsonb in production  
   status: varchar("status").notNull().default("available"),
-  featured: boolean("featured").default(false),
+  stockNumber: varchar("stock_number").notNull(),
+  vin: varchar("vin").notNull(),
+  isFeatured: boolean("is_featured").default(false),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
+  statusBanner: varchar("status_banner"),
 });
 
 const pool = new Pool({ connectionString: process.env.DATABASE_URL });
@@ -62,10 +67,18 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
 
   try {
+    console.log('Attempting to connect to database...');
     const vehicleList = await db.select().from(vehicles).where(eq(vehicles.status, 'available'));
+    console.log('Database query successful, found vehicles:', vehicleList.length);
     res.json({ vehicles: vehicleList });
   } catch (error) {
-    console.error('Error fetching public vehicles:', error);
-    res.status(500).json({ message: 'Failed to fetch vehicles' });
+    console.error('Database connection error:', error);
+    console.error('DATABASE_URL exists:', !!process.env.DATABASE_URL);
+    console.error('DATABASE_URL length:', process.env.DATABASE_URL?.length);
+    res.status(500).json({ 
+      message: 'Failed to fetch vehicles',
+      error: error instanceof Error ? error.message : 'Unknown error',
+      hasDbUrl: !!process.env.DATABASE_URL
+    });
   }
 }
