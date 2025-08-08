@@ -26,19 +26,30 @@ export default function Admin() {
   const queryClient = useQueryClient();
   const { toast } = useToast();
 
-  // Check if this is a static deployment
-  const isStaticDeployment = typeof window !== 'undefined' && !window.location.href.includes('localhost') && !window.location.href.includes('replit.dev') && !window.location.href.includes('127.0.0.1');
+  // Check if this is a static deployment - but allow admin if explicitly enabled
+  const isDevelopment = typeof window !== 'undefined' && (window.location.href.includes('localhost') || window.location.href.includes('replit.dev') || window.location.href.includes('127.0.0.1'));
+  const isAdminEnabled = import.meta.env.VITE_ENABLE_ADMIN === 'true';
+  const isStaticDeployment = !isDevelopment && !isAdminEnabled;
+  
+  console.log("Admin environment check:", {
+    isDevelopment,
+    isAdminEnabled,
+    isStaticDeployment,
+    VITE_ENABLE_ADMIN: import.meta.env.VITE_ENABLE_ADMIN
+  });
 
   // Check authentication status
   const { data: authData, refetch: refetchAuth } = useQuery({
     queryKey: ["/api/auth/check"],
     queryFn: async () => {
-      // Skip auth check for static deployments
-      if (typeof window !== 'undefined' && !window.location.href.includes('localhost') && !window.location.href.includes('replit.dev') && !window.location.href.includes('127.0.0.1')) {
+      // Skip auth check only for static deployments (production without admin enabled)
+      if (isStaticDeployment) {
         return { isAuthenticated: false };
       }
       
-      const response = await fetch("/api/auth/check", { credentials: 'include' });
+      // Use Vercel backend for production, local for development
+      const baseUrl = isDevelopment ? '' : 'https://admin-backend-etkz45d8r-jeremys-projects-0f68a4ab.vercel.app';
+      const response = await fetch(`${baseUrl}/api/auth/check`, { credentials: 'include' });
       if (!response.ok) {
         return { isAuthenticated: false };
       }
@@ -59,12 +70,14 @@ export default function Admin() {
   // Login mutation
   const loginMutation = useMutation({
     mutationFn: async (credentials: { username: string; password: string }) => {
-      // Skip login for static deployments
-      if (typeof window !== 'undefined' && !window.location.href.includes('localhost') && !window.location.href.includes('replit.dev') && !window.location.href.includes('127.0.0.1')) {
+      // Skip login for static deployments (production without admin enabled)
+      if (isStaticDeployment) {
         throw new Error('Admin login not available in static deployment');
       }
       
-      const response = await fetch("/api/auth/login", {
+      // Use Vercel backend for production, local for development  
+      const baseUrl = isDevelopment ? '' : 'https://admin-backend-etkz45d8r-jeremys-projects-0f68a4ab.vercel.app';
+      const response = await fetch(`${baseUrl}/api/auth/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: 'include',
@@ -175,6 +188,13 @@ export default function Admin() {
                 <p className="text-sm text-yellow-800">
                   <strong>Notice:</strong> Admin functionality is only available in the development environment. 
                   This static deployment provides read-only access to the vehicle inventory.
+                </p>
+              </div>
+            )}
+            {!isDevelopment && isAdminEnabled && (
+              <div className="mb-4 p-4 bg-green-50 border border-green-200 rounded-md">
+                <p className="text-sm text-green-800">
+                  <strong>Production Admin Mode:</strong> Admin functionality enabled for production environment.
                 </p>
               </div>
             )}

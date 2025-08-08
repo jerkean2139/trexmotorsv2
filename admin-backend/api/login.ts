@@ -1,17 +1,4 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import bcrypt from 'bcrypt';
-import session from 'express-session';
-import connectPg from 'connect-pg-simple';
-
-// Session configuration
-const sessionTtl = 7 * 24 * 60 * 60 * 1000; // 1 week
-const pgStore = connectPg(session);
-const sessionStore = new pgStore({
-  conString: process.env.DATABASE_URL,
-  createTableIfMissing: false,
-  ttl: sessionTtl,
-  tableName: 'sessions',
-});
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   // Enable CORS
