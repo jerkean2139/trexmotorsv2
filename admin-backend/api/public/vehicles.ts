@@ -41,10 +41,20 @@ const pool = new Pool({ connectionString: process.env.DATABASE_URL });
 const db = drizzle(pool);
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
-  // Enable CORS with credentials - wildcard pattern for all Vercel workspace deployments
+  // Enable CORS with credentials - specific frontend URLs
   const origin = req.headers.origin;
+  const allowedOrigins = [
+    'https://workspace-31rsjcb1j-jeremys-projects-0f68a4ab.vercel.app',
+    'https://workspace-3zi5j8xl7-jeremys-projects-0f68a4ab.vercel.app',
+    'https://workspace-8bpogweuy-jeremys-projects-0f68a4ab.vercel.app',
+    'https://workspace-oy8cx6rgj-jeremys-projects-0f68a4ab.vercel.app',
+    'http://localhost:5000',
+    'http://localhost:3000'
+  ];
+
   const isAllowedOrigin = origin && (
-    origin.includes('workspace-') && origin.includes('jeremys-projects-0f68a4ab.vercel.app') ||
+    allowedOrigins.includes(origin) ||
+    (origin.includes('workspace-') && origin.includes('jeremys-projects-0f68a4ab.vercel.app')) ||
     origin.includes('replit.dev') ||
     origin.includes('localhost') ||
     origin.includes('127.0.0.1') ||
@@ -52,7 +62,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   );
   
   if (isAllowedOrigin) {
-    res.setHeader('Access-Control-Allow-Origin', origin || '*');
+    res.setHeader('Access-Control-Allow-Origin', origin);
+  } else {
+    res.setHeader('Access-Control-Allow-Origin', 'https://workspace-31rsjcb1j-jeremys-projects-0f68a4ab.vercel.app');
   }
   res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, x-vercel-protection-bypass');
