@@ -15,15 +15,11 @@ Netlify detected hardcoded database credentials in `migrate-to-production.js` li
 
 ### For Netlify (if running migration):
 ```
-DEV_DATABASE_URL=postgresql://neondb_owner:npg_8M5exDlqvjsV@ep-dark-pine-adww7qup.c-2.us-east-1.aws.neon.tech/neondb?sslmode=require
-PROD_DATABASE_URL=postgresql://neondb_owner:npg_GcEpRV9vhFg6@ep-hidden-recipe-adwwt15c.c-2.us-east-1.aws.neon.tech/neondb?sslmode=require
-```
+PGHOST=your-database-host
+PGDATABASE=your-database-name
+PGUSER=your-username
+PGPASSWORD=your-password
 
-### For Vercel Backend:
-```
-DATABASE_URL=postgresql://neondb_owner:npg_8M5exDlqvjsV@ep-dark-pine-adww7qup.c-2.us-east-1.aws.neon.tech/neondb?sslmode=require
-SESSION_SECRET=trex-motors-secure-session-key-2025-production
-```
 
 ## Files Changed
 - `migrate-to-production.js` - Credentials removed, environment variables added
