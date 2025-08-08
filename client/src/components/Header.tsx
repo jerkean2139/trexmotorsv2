@@ -66,7 +66,7 @@ export default function Header() {
               {/* Admin link - only show on production */}
               {typeof window !== 'undefined' && !window.location.href.includes('localhost') && !window.location.href.includes('replit.dev') && (
                 <a 
-                  href="https://trexmotorsv2-bd2tufhyz-jeremys-projects-0f68a4ab.vercel.app"
+                  href="https://admin-backend-jmasmsh6s-jeremys-projects-0f68a4ab.vercel.app"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-gray-600 hover:text-trex-green px-3 py-2 text-sm font-medium transition-colors"
@@ -114,7 +114,7 @@ export default function Header() {
                   {/* Admin link - only show on production */}
                   {typeof window !== 'undefined' && !window.location.href.includes('localhost') && !window.location.href.includes('replit.dev') ? (
                     <a 
-                      href="https://trexmotorsv2-bd2tufhyz-jeremys-projects-0f68a4ab.vercel.app"
+                      href="https://admin-backend-jmasmsh6s-jeremys-projects-0f68a4ab.vercel.app"
                       target="_blank"
                       rel="noopener noreferrer"
                       className="text-gray-600 hover:text-trex-green block px-3 py-2 text-base font-medium text-left"
