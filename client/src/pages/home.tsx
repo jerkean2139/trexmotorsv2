@@ -28,7 +28,7 @@ export default function Home() {
       // Try admin backend first, fall back to embedded data
       if (typeof window !== 'undefined' && !window.location.href.includes('localhost') && !window.location.href.includes('replit.dev') && !window.location.href.includes('127.0.0.1')) {
         try {
-          const response = await fetch('https://admin-backend-jmasmsh6s-jeremys-projects-0f68a4ab.vercel.app/api/public/vehicles');
+          const response = await fetch('https://admin-backend-fe2fl2kul-jeremys-projects-0f68a4ab.vercel.app/api/public/vehicles');
           if (response.ok) {
             console.log("Using live data from admin backend");
             return await response.json();
@@ -66,7 +66,7 @@ export default function Home() {
       // Try admin backend first, fall back to embedded data
       if (typeof window !== 'undefined' && !window.location.href.includes('localhost') && !window.location.href.includes('replit.dev') && !window.location.href.includes('127.0.0.1')) {
         try {
-          const response = await fetch('https://admin-backend-jmasmsh6s-jeremys-projects-0f68a4ab.vercel.app/api/public/vehicles/featured');
+          const response = await fetch('https://admin-backend-fe2fl2kul-jeremys-projects-0f68a4ab.vercel.app/api/public/vehicles/featured');
           if (response.ok) {
             console.log("Using live featured data from admin backend");
             return await response.json();
