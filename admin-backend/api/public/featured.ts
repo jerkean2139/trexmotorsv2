@@ -48,6 +48,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     'https://workspace-3zi5j8xl7-jeremys-projects-0f68a4ab.vercel.app',
     'https://workspace-8bpogweuy-jeremys-projects-0f68a4ab.vercel.app',
     'https://workspace-oy8cx6rgj-jeremys-projects-0f68a4ab.vercel.app',
+    'https://workspace-nu-ecru.vercel.app/',
     'https://trexmotorsrichmond.netlify.app',
     'http://localhost:5000',
     'http://localhost:3000'
