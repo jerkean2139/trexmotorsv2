@@ -28,7 +28,12 @@ export default function Home() {
       // Try admin backend first, fall back to embedded data
       if (typeof window !== 'undefined' && !window.location.href.includes('localhost') && !window.location.href.includes('replit.dev') && !window.location.href.includes('127.0.0.1')) {
         try {
-          const response = await fetch('https://admin-backend-etkz45d8r-jeremys-projects-0f68a4ab.vercel.app/api/public/vehicles');
+          const headers: Record<string, string> = {};
+          // Add protection bypass header for production  
+          if (import.meta.env.VITE_VERCEL_BYPASS_TOKEN) {
+            headers['x-vercel-protection-bypass'] = import.meta.env.VITE_VERCEL_BYPASS_TOKEN;
+          }
+          const response = await fetch('https://admin-backend-etkz45d8r-jeremys-projects-0f68a4ab.vercel.app/api/public/vehicles', { headers });
           if (response.ok) {
             console.log("Using live data from admin backend");
             return await response.json();
@@ -66,7 +71,12 @@ export default function Home() {
       // Try admin backend first, fall back to embedded data
       if (typeof window !== 'undefined' && !window.location.href.includes('localhost') && !window.location.href.includes('replit.dev') && !window.location.href.includes('127.0.0.1')) {
         try {
-          const response = await fetch('https://admin-backend-etkz45d8r-jeremys-projects-0f68a4ab.vercel.app/api/public/vehicles/featured');
+          const headers: Record<string, string> = {};
+          // Add protection bypass header for production  
+          if (import.meta.env.VITE_VERCEL_BYPASS_TOKEN) {
+            headers['x-vercel-protection-bypass'] = import.meta.env.VITE_VERCEL_BYPASS_TOKEN;
+          }
+          const response = await fetch('https://admin-backend-etkz45d8r-jeremys-projects-0f68a4ab.vercel.app/api/public/vehicles/featured', { headers });
           if (response.ok) {
             console.log("Using live featured data from admin backend");
             return await response.json();

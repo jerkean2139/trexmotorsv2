@@ -57,9 +57,19 @@ export default function Admin() {
         return { isAuthenticated: false };
       }
       
-      // Use backend URL directly to bypass CORS/SSO issues
+      // Use backend URL directly with protection bypass header
       const baseUrl = isDevelopment ? '' : 'https://admin-backend-etkz45d8r-jeremys-projects-0f68a4ab.vercel.app';
-      const response = await fetch(`${baseUrl}/api/auth/check`, { credentials: 'include' });
+      const headers: Record<string, string> = { 'Content-Type': 'application/json' };
+      
+      // Add protection bypass header for production
+      if (!isDevelopment) {
+        headers['x-vercel-protection-bypass'] = import.meta.env.VITE_VERCEL_BYPASS_TOKEN || '';
+      }
+      
+      const response = await fetch(`${baseUrl}/api/auth/check`, { 
+        credentials: 'include',
+        headers 
+      });
       if (!response.ok) {
         return { isAuthenticated: false };
       }
@@ -85,11 +95,18 @@ export default function Admin() {
         throw new Error('Admin login not available in static deployment');
       }
       
-      // Use backend URL directly to bypass CORS/SSO issues  
+      // Use backend URL directly with protection bypass header
       const baseUrl = isDevelopment ? '' : 'https://admin-backend-etkz45d8r-jeremys-projects-0f68a4ab.vercel.app';
+      const headers: Record<string, string> = { 'Content-Type': 'application/json' };
+      
+      // Add protection bypass header for production
+      if (!isDevelopment) {
+        headers['x-vercel-protection-bypass'] = import.meta.env.VITE_VERCEL_BYPASS_TOKEN || '';
+      }
+      
       const response = await fetch(`${baseUrl}/api/auth/login`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers,
         credentials: 'include',
         body: JSON.stringify(credentials)
       });
@@ -118,8 +135,16 @@ export default function Admin() {
   const logoutMutation = useMutation({
     mutationFn: async () => {
       const baseUrl = isDevelopment ? '' : 'https://admin-backend-etkz45d8r-jeremys-projects-0f68a4ab.vercel.app';
+      const headers: Record<string, string> = { 'Content-Type': 'application/json' };
+      
+      // Add protection bypass header for production
+      if (!isDevelopment) {
+        headers['x-vercel-protection-bypass'] = import.meta.env.VITE_VERCEL_BYPASS_TOKEN || '';
+      }
+      
       return fetch(`${baseUrl}/api/auth/logout`, {
         method: 'POST',
+        headers,
         credentials: 'include'
       });
     },
