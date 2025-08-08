@@ -9,20 +9,14 @@ The frontend code has been updated to include the `x-vercel-protection-bypass` h
 ### Step 1: Create Bypass Secret in Backend Project ✅ COMPLETED
 ✅ You've successfully created the bypass secret for the backend project
 
-### Step 2: Add Environment Variables to Frontend Project
+### Step 2: Add Environment Variables to Frontend Project ✅ BYPASS TOKEN ADDED
+
+**Still need to add:**
+- Name: `VITE_ENABLE_ADMIN`
+- Value: `true`
+
 Go to Vercel Dashboard → `workspace` project → **Settings → Environment Variables**
-
-**Add these TWO variables:**
-
-1. **Bypass Token:**
-   - Name: `VITE_VERCEL_BYPASS_TOKEN`
-   - Value: `[the secret you just created]`
-
-2. **Enable Admin:**
-   - Name: `VITE_ENABLE_ADMIN`
-   - Value: `true`
-
-**Save both variables** (Vercel will auto-redeploy)
+Add the admin variable and save (Vercel will auto-redeploy)
 
 ## 🎯 Expected Result:
 After adding both environment variables:
