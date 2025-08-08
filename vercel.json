@@ -4,10 +4,6 @@
   "framework": "vite",
   "rewrites": [
     {
-      "source": "/api/(.*)",
-      "destination": "https://admin-backend-etkz45d8r-jeremys-projects-0f68a4ab.vercel.app/api/$1"
-    },
-    {
       "source": "/(.*)",
       "destination": "/index.html"
     }

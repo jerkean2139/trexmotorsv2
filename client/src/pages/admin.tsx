@@ -57,8 +57,8 @@ export default function Admin() {
         return { isAuthenticated: false };
       }
       
-      // Use relative paths for API calls (works on both dev and Vercel)
-      const baseUrl = '';
+      // Use backend URL directly to bypass CORS/SSO issues
+      const baseUrl = isDevelopment ? '' : 'https://admin-backend-etkz45d8r-jeremys-projects-0f68a4ab.vercel.app';
       const response = await fetch(`${baseUrl}/api/auth/check`, { credentials: 'include' });
       if (!response.ok) {
         return { isAuthenticated: false };
@@ -85,8 +85,8 @@ export default function Admin() {
         throw new Error('Admin login not available in static deployment');
       }
       
-      // Use relative paths for API calls (works on both dev and Vercel)
-      const baseUrl = '';
+      // Use backend URL directly to bypass CORS/SSO issues  
+      const baseUrl = isDevelopment ? '' : 'https://admin-backend-etkz45d8r-jeremys-projects-0f68a4ab.vercel.app';
       const response = await fetch(`${baseUrl}/api/auth/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -117,7 +117,7 @@ export default function Admin() {
   // Logout mutation
   const logoutMutation = useMutation({
     mutationFn: async () => {
-      const baseUrl = '';
+      const baseUrl = isDevelopment ? '' : 'https://admin-backend-etkz45d8r-jeremys-projects-0f68a4ab.vercel.app';
       return fetch(`${baseUrl}/api/auth/logout`, {
         method: 'POST',
         credentials: 'include'
