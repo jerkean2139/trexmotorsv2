@@ -6,7 +6,6 @@ import bcrypt from 'bcrypt';
 import { Pool, neonConfig } from '@neondatabase/serverless';
 import { drizzle } from 'drizzle-orm/neon-serverless';
 import { eq } from 'drizzle-orm';
-import ws from 'ws';
 import * as schema from './schema.js';
 
 // Type declarations for session
@@ -15,8 +14,6 @@ declare module 'express-session' {
     isAuthenticated?: boolean;
   }
 }
-
-neonConfig.webSocketConstructor = ws;
 
 const app = express();
 const PORT = process.env.PORT || 3001;
