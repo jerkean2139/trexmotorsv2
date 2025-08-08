@@ -31,11 +31,21 @@ export default function Admin() {
   const isAdminEnabled = import.meta.env.VITE_ENABLE_ADMIN === 'true';
   const isStaticDeployment = !isDevelopment && !isAdminEnabled;
   
-  console.log("Admin environment check:", {
+  // Force debug logging for Netlify troubleshooting
+  console.log("🔍 Admin environment debug:", {
     isDevelopment,
     isAdminEnabled,
     isStaticDeployment,
-    VITE_ENABLE_ADMIN: import.meta.env.VITE_ENABLE_ADMIN
+    VITE_ENABLE_ADMIN: import.meta.env.VITE_ENABLE_ADMIN,
+    windowLocation: window.location.href,
+    allEnvVars: import.meta.env
+  });
+  
+  // Additional debug info
+  console.log("🌍 Current environment:", {
+    isDev: import.meta.env.DEV,
+    isProd: import.meta.env.PROD,
+    mode: import.meta.env.MODE
   });
 
   // Check authentication status
@@ -200,6 +210,15 @@ export default function Admin() {
                 <p className="text-sm text-green-800">
                   <strong>Production Admin Mode:</strong> Admin functionality enabled for production environment.
                 </p>
+              </div>
+            )}
+            
+            {/* Debug info for troubleshooting */}
+            {!isDevelopment && (
+              <div className="mb-4 p-3 bg-blue-50 border border-blue-200 rounded-md text-xs">
+                <p><strong>Debug:</strong> VITE_ENABLE_ADMIN = {import.meta.env.VITE_ENABLE_ADMIN}</p>
+                <p>isAdminEnabled = {isAdminEnabled ? 'true' : 'false'}</p>
+                <p>isStaticDeployment = {isStaticDeployment ? 'true' : 'false'}</p>
               </div>
             )}
             <form onSubmit={handleLogin} className="space-y-4">
