@@ -16,6 +16,32 @@ declare module "express-session" {
 }
 
 export async function registerRoutes(app: Express): Promise<Server> {
+  // CORS middleware - allow frontend to access backend
+  app.use((req, res, next) => {
+    const allowedOrigins = [
+      'https://workspace-i3i4coxo5-jeremys-projects-0f68a4ab.vercel.app',
+      'https://597d1f9b-4b60-42de-b433-d65b1f66a165-00-1y525bongrr2a.janeway.replit.dev',
+      'http://localhost:5000',
+      'http://127.0.0.1:5000'
+    ];
+    
+    const origin = req.headers.origin;
+    if (allowedOrigins.includes(origin || '')) {
+      res.setHeader('Access-Control-Allow-Origin', origin || '');
+    }
+    
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, x-vercel-protection-bypass');
+    res.setHeader('Access-Control-Allow-Credentials', 'true');
+    
+    if (req.method === 'OPTIONS') {
+      res.sendStatus(200);
+      return;
+    }
+    
+    next();
+  });
+
   // Session middleware
   app.use(session({
     secret: process.env.SESSION_SECRET || 'trex-motors-secret-key',
