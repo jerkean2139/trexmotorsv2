@@ -1,21 +1,17 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
-  // Enable CORS with credentials
-  const allowedOrigins = [
-    'https://trexmotorsrichmond.netlify.app',
-    'http://localhost:5000',
-    'https://127.0.0.1:5000',
-    /\.replit\.dev$/,
-    /\.replit\.app$/
-  ];
-  
+  // Enable CORS with credentials - wildcard pattern for all Vercel workspace deployments
   const origin = req.headers.origin;
-  const isAllowed = allowedOrigins.some(allowed => 
-    typeof allowed === 'string' ? allowed === origin : allowed.test(origin || '')
+  const isAllowedOrigin = origin && (
+    origin.includes('workspace-') && origin.includes('jeremys-projects-0f68a4ab.vercel.app') ||
+    origin.includes('replit.dev') ||
+    origin.includes('localhost') ||
+    origin.includes('127.0.0.1') ||
+    origin.includes('trexmotorsrichmond.netlify.app')
   );
   
-  if (isAllowed) {
+  if (isAllowedOrigin) {
     res.setHeader('Access-Control-Allow-Origin', origin || '*');
   }
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');

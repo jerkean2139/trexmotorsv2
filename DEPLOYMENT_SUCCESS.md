@@ -2,7 +2,7 @@
 
 ## Final Production URLs:
 **Frontend:** https://workspace-fe8jo9ncd-jeremys-projects-0f68a4ab.vercel.app
-**Backend:** https://admin-backend-3wiwh9nkc-jeremys-projects-0f68a4ab.vercel.app
+**Backend:** https://admin-backend-mc9b49n5g-jeremys-projects-0f68a4ab.vercel.app
 
 ## 🎯 CORS Cycle SOLVED!
 ✅ **Wildcard CORS**: Backend now accepts ANY workspace-*.vercel.app URL

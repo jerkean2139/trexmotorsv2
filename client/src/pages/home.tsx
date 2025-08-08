@@ -33,7 +33,7 @@ export default function Home() {
           if (import.meta.env.VITE_VERCEL_BYPASS_TOKEN) {
             headers['x-vercel-protection-bypass'] = import.meta.env.VITE_VERCEL_BYPASS_TOKEN;
           }
-          const response = await fetch('https://admin-backend-3wiwh9nkc-jeremys-projects-0f68a4ab.vercel.app/api/public/vehicles', { headers });
+          const response = await fetch('https://admin-backend-mc9b49n5g-jeremys-projects-0f68a4ab.vercel.app/api/public/vehicles', { headers });
           if (response.ok) {
             console.log("Using live data from admin backend");
             return await response.json();
@@ -76,7 +76,7 @@ export default function Home() {
           if (import.meta.env.VITE_VERCEL_BYPASS_TOKEN) {
             headers['x-vercel-protection-bypass'] = import.meta.env.VITE_VERCEL_BYPASS_TOKEN;
           }
-          const response = await fetch('https://admin-backend-3wiwh9nkc-jeremys-projects-0f68a4ab.vercel.app/api/public/vehicles/featured', { headers });
+          const response = await fetch('https://admin-backend-mc9b49n5g-jeremys-projects-0f68a4ab.vercel.app/api/public/vehicles/featured', { headers });
           if (response.ok) {
             console.log("Using live featured data from admin backend");
             return await response.json();
