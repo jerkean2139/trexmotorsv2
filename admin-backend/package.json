@@ -7,7 +7,9 @@
     "build": "tsc",
     "start": "node dist/server.js",
     "vercel-build": "npm run build",
-    "db:push": "drizzle-kit push"
+    "db:push": "drizzle-kit push",
+    "print-cwd": "pwd && ls -l",  
+    
   },
   "dependencies": {
     "@neondatabase/serverless": "^0.10.4",
