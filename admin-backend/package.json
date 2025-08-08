@@ -4,7 +4,7 @@
   "type": "module",
   "scripts": {
     "dev": "NODE_ENV=development tsx server.ts",
-    "build": "tsc && cp vercel-entry.js dist/",
+    "build": "tsc",
     "start": "node dist/server.js",
     "vercel-build": "npm run build",
     "db:push": "drizzle-kit push"
