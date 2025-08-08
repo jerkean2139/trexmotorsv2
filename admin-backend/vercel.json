@@ -2,26 +2,8 @@
   "version": 2,
   "builds": [
     {
-      "src": "api/public/*.ts",
+      "src": "api/**/*.ts",
       "use": "@vercel/node"
-    },
-    {
-      "src": "server.ts",
-      "use": "@vercel/node"
-    }
-  ],
-  "routes": [
-    {
-      "src": "/api/public/vehicles/featured",
-      "dest": "/api/public/featured.ts"
-    },
-    {
-      "src": "/api/public/vehicles",
-      "dest": "/api/public/vehicles.ts"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/server.ts"
     }
   ]
 }
