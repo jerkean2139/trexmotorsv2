@@ -1,24 +1,23 @@
 {
   "version": 2,
-  "functions": {
-    "api/public/vehicles.ts": {
-      "runtime": "@vercel/node"
-    },
-    "api/public/featured.ts": {
-      "runtime": "@vercel/node"
-    },
-    "server.ts": {
-      "runtime": "@vercel/node"
-    }
-  },
-  "routes": [
+  "builds": [
     {
-      "src": "/api/public/vehicles",
-      "dest": "/api/public/vehicles.ts"
+      "src": "api/public/*.ts",
+      "use": "@vercel/node"
     },
+    {
+      "src": "server.ts",
+      "use": "@vercel/node"
+    }
+  ],
+  "routes": [
     {
       "src": "/api/public/vehicles/featured",
       "dest": "/api/public/featured.ts"
+    },
+    {
+      "src": "/api/public/vehicles",
+      "dest": "/api/public/vehicles.ts"
     },
     {
       "src": "/(.*)",
