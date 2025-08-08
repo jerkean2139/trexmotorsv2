@@ -58,7 +58,7 @@ export default function Admin() {
       }
       
       // Use backend URL directly with protection bypass header
-      const baseUrl = isDevelopment ? '' : 'https://admin-backend-mc9b49n5g-jeremys-projects-0f68a4ab.vercel.app';
+      const baseUrl = isDevelopment ? '' : 'https://admin-backend-eckjz4xit-jeremys-projects-0f68a4ab.vercel.app';
       const headers: Record<string, string> = { 'Content-Type': 'application/json' };
       
       // Add protection bypass header for production
@@ -96,7 +96,7 @@ export default function Admin() {
       }
       
       // Use backend URL directly with protection bypass header
-      const baseUrl = isDevelopment ? '' : 'https://admin-backend-mc9b49n5g-jeremys-projects-0f68a4ab.vercel.app';
+      const baseUrl = isDevelopment ? '' : 'https://admin-backend-eckjz4xit-jeremys-projects-0f68a4ab.vercel.app';
       const headers: Record<string, string> = { 'Content-Type': 'application/json' };
       
       // Add protection bypass header for production
@@ -134,7 +134,7 @@ export default function Admin() {
   // Logout mutation
   const logoutMutation = useMutation({
     mutationFn: async () => {
-      const baseUrl = isDevelopment ? '' : 'https://admin-backend-mc9b49n5g-jeremys-projects-0f68a4ab.vercel.app';
+      const baseUrl = isDevelopment ? '' : 'https://admin-backend-eckjz4xit-jeremys-projects-0f68a4ab.vercel.app';
       const headers: Record<string, string> = { 'Content-Type': 'application/json' };
       
       // Add protection bypass header for production
