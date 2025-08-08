@@ -107,7 +107,11 @@ export default function Admin() {
   // Logout mutation
   const logoutMutation = useMutation({
     mutationFn: async () => {
-      return apiRequest("POST", "/api/auth/logout");
+      const baseUrl = isDevelopment ? '' : 'https://admin-backend-etkz45d8r-jeremys-projects-0f68a4ab.vercel.app';
+      return fetch(`${baseUrl}/api/auth/logout`, {
+        method: 'POST',
+        credentials: 'include'
+      });
     },
     onSuccess: () => {
       setIsAuthenticated(false);
