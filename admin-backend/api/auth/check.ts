@@ -29,8 +29,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (isAllowedOrigin) {
     res.setHeader('Access-Control-Allow-Origin', origin || '*');
   }
-  res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, x-vercel-protection-bypass');
   res.setHeader('Access-Control-Allow-Credentials', 'true');
 
   if (req.method === 'OPTIONS') {

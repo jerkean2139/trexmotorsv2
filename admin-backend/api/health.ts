@@ -4,7 +4,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   // Set CORS headers for all requests
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, x-vercel-protection-bypass');
 
   if (req.method === 'OPTIONS') {
     return res.status(200).end();
