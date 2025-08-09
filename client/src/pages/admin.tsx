@@ -56,7 +56,7 @@ export default function Admin() {
       if (isStaticDeployment) {
         return { isAuthenticated: false };
       }
-      
+      // blank comment to commit changes
       // Use backend URL directly with protection bypass header
       const baseUrl = isDevelopment ? '' : 'https://admin-backend-lyart.vercel.app';
       const headers: Record<string, string> = { 'Content-Type': 'application/json' };
