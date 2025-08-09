@@ -18,7 +18,7 @@ This is a comprehensive used car dealership website for T-Rex Motors in Richmond
 ✓ **WebSocket Configuration** - Added proper WebSocket polyfill for Neon Database on Vercel
 ✓ **All APIs Working** - Health, test, login, vehicles, and featured endpoints fully functional
 ✓ **Live Vehicle Data** - Backend now serving real vehicle inventory from production database
-✓ **Latest Deployment URLs** - Frontend: trexmotorsrichmond.netlify.app, Backend: admin-backend-306olvff2
+✓ **Latest Deployment URLs** - Frontend: workspace-oy8cx6rgj, Backend: admin-backend-lyart.vercel.app
 ✓ **CORS Integration Fixed** - Frontend and backend now fully connected with proper CORS headers
 ✓ **Netlify Deployment Active** - Main website fully functional with real-time backend integration
 ✓ **Vercel Protection Bypass** - Resolved 401 redirect issues by using Netlify for frontend hosting

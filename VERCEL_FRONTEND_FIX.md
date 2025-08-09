@@ -30,7 +30,7 @@ If new frontend URL is generated, update the CORS allowedOrigins in:
 - `admin-backend/api/public/featured.ts`
 
 ## Current Working Components
-✅ **Backend**: https://admin-backend-306olvff2-jeremys-projects-0f68a4ab.vercel.app
+✅ **Backend**: https://admin-backend-lyart.vercel.app
 ✅ **Database**: PostgreSQL with 20+ vehicles
 ✅ **Local Development**: http://localhost:5000 (fully functional)
 
